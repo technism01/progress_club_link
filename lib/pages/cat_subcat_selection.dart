@@ -1,9 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:progress_club_link/common/constants.dart';
 import 'package:progress_club_link/common/vertical_tab.dart';
 
 class CatSubCatSelection extends StatefulWidget {
-  const CatSubCatSelection({Key? key}) : super(key: key);
+  final List<List> selectedList;
+
+  const CatSubCatSelection({Key? key, required this.selectedList})
+      : super(key: key);
 
   @override
   State<CatSubCatSelection> createState() => _CatSubCatSelectionState();
@@ -43,7 +48,17 @@ class _CatSubCatSelectionState extends State<CatSubCatSelection> {
     }
   ];
 
-  List selectedSubCategories = [[], []];
+  List<List> selectedSubCategories = [[], []];
+  bool isEmptyList = true;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.selectedList.isNotEmpty) {
+      selectedSubCategories = widget.selectedList;
+      isEmptyList = false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +66,19 @@ class _CatSubCatSelectionState extends State<CatSubCatSelection> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Choose Profession"),
+        actions: [
+          if (!isEmptyList)
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, selectedSubCategories);
+              },
+              child: Text(
+                "Save",
+                style: TextStyle(
+                    color: appPrimaryColor, fontWeight: FontWeight.w600),
+              ),
+            ),
+        ],
       ),
       body: VerticalTabs(
         tabsWidth: size.width * 0.34,
@@ -72,7 +100,7 @@ class _CatSubCatSelectionState extends State<CatSubCatSelection> {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  if (selectedSubCategories[i].length > 0)
+                  if (selectedSubCategories[i].isNotEmpty)
                     Container(
                       decoration: BoxDecoration(
                         color: appPrimaryColor,
@@ -101,8 +129,16 @@ class _CatSubCatSelectionState extends State<CatSubCatSelection> {
               subCategoryList: list[i]["subCategoryList"],
               onSelect: (List list) {
                 setState(() {
+                  isEmptyList = true;
                   selectedSubCategories[i] = list;
                 });
+                for (var element in selectedSubCategories) {
+                  if (element.isNotEmpty) {
+                    setState(() {
+                      isEmptyList = false;
+                    });
+                  }
+                }
               },
               selectedList: selectedSubCategories[i],
             ),
@@ -147,6 +183,8 @@ class _SubCategoryViewState extends State<SubCategoryView> {
           value:
               selectedList.contains("${widget.subCategoryList[index]["id"]}"),
           activeColor: appPrimaryColor,
+          dense: true,
+          contentPadding: const EdgeInsets.only(left: 6),
           title: Text(
             "${widget.subCategoryList[index]["name"]}",
             style: TextStyle(

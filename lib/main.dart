@@ -45,6 +45,16 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.light(
           primary: appPrimaryColor,
         ),
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.white,
+          titleTextStyle: TextStyle(
+              color: appPrimaryColor,
+              fontWeight: FontWeight.w700,
+              fontSize: 18),
+          iconTheme: IconThemeData(
+            color: appPrimaryColor,
+          ),
+        ),
       ),
       home: const Login(),
     );

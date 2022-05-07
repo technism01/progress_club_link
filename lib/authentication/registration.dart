@@ -1,14 +1,21 @@
+import 'dart:developer';
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:progress_club_link/common/PCChapters.dart';
 import 'package:progress_club_link/common/constants.dart';
+import 'package:progress_club_link/common/text_styles.dart';
 import 'package:progress_club_link/helper_functions/save_user_in_local.dart';
+import 'package:progress_club_link/pages/cat_subcat_selection.dart';
 import 'package:progress_club_link/providers/authentication_provider.dart';
 import 'package:progress_club_link/widgets/my_textform_field.dart';
 import 'package:progress_club_link/widgets/rounded_elevatedbutton.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:dio/dio.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Registration extends StatefulWidget {
   const Registration({Key? key}) : super(key: key);
@@ -23,15 +30,142 @@ class _RegistrationState extends State<Registration> {
   TextEditingController txtChapter = TextEditingController();
   TextEditingController txtCompanyName = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  File? pickedImage;
+  List<List> selectedSubCatList = [];
+  List finalSubList = [];
+
+  Future<File?> _getFromCamera() async {
+    XFile? image = await ImagePicker().pickImage(source: ImageSource.camera);
+    if (image != null) {
+      return File(image.path);
+    }
+    return null;
+  }
+
+  Future<File?> _getFromGallery() async {
+    XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      return File(image.path);
+    }
+    return null;
+  }
+
+  void _imagePick() {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      elevation: 1,
+      isDismissible: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+      ),
+      context: context,
+      builder: (BuildContext bc) {
+        return Wrap(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0, bottom: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const SizedBox(
+                          height: 36,
+                          width: 36,
+                        ),
+                        Text(
+                          "Choose option",
+                          style: MyTextStyles.semiBold.copyWith(fontSize: 16),
+                        ),
+                        SizedBox(
+                          height: 30,
+                          width: 30,
+                          child: FloatingActionButton(
+                            elevation: 0,
+                            backgroundColor: const Color(0xcceeeeee),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Icon(
+                              Icons.close_rounded,
+                              size: 21,
+                              color: Colors.black,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  ListTile(
+                    onTap: () async {
+                      pickedImage = await _getFromCamera();
+
+                      if (pickedImage == null) {
+                        Fluttertoast.showToast(msg: "failed to pick image");
+                      }
+                      setState(() {});
+                      Navigator.pop(context);
+                    },
+                    leading: const Padding(
+                      padding: EdgeInsets.only(right: 10.0, left: 15),
+                      child: Icon(
+                        Icons.camera_alt,
+                        size: 20,
+                      ),
+                    ),
+                    title: Text(
+                      "Camera",
+                      style: MyTextStyles.medium.copyWith(fontSize: 14),
+                    ),
+                  ),
+                  ListTile(
+                    onTap: () async {
+                      pickedImage = await _getFromGallery();
+
+                      if (pickedImage == null) {
+                        Fluttertoast.showToast(msg: "failed to pick image");
+                      }
+                      setState(() {});
+                      Navigator.pop(context);
+                    },
+                    leading: const Padding(
+                      padding: EdgeInsets.only(right: 10.0, left: 15),
+                      child: Icon(
+                        Icons.photo,
+                        size: 20,
+                      ),
+                    ),
+                    title: Text(
+                      "Upload from gallery",
+                      style: MyTextStyles.medium.copyWith(fontSize: 14),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        );
+      },
+    );
+  }
 
   registerUser() async {
     FormData data = FormData.fromMap({
       "name": txtName.text,
-      "subCategoryIds": [],
-      "pcGroup": txtChapter.text,
       "mobile": txtMobileNumber.text,
       "companyName": txtCompanyName.text,
+      "pcGroup": txtChapter.text,
+      "subCategoryIds": finalSubList,
     });
+    if (pickedImage != null) {
+      data.files.add(
+          MapEntry("profile", await MultipartFile.fromFile(pickedImage!.path)));
+    }
     context
         .read<AuthenticationProvider>()
         .registerUser(data: data)
@@ -58,23 +192,28 @@ class _RegistrationState extends State<Registration> {
           key: _formKey,
           child: SingleChildScrollView(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
                   height: MediaQuery.of(context).padding.top + 35,
                 ),
-                Image.asset(
-                  "assets/images/pc_logo.png",
-                  height: 120,
+                Center(
+                  child: Image.asset(
+                    "assets/images/pc_logo.png",
+                    height: 120,
+                  ),
                 ),
                 const SizedBox(
                   height: 15,
                 ),
-                Text(
-                  "मेरा बिज़नेस तो क्लब में ही",
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: appPrimaryColor,
-                    fontWeight: FontWeight.w700,
+                Center(
+                  child: Text(
+                    "मेरा बिज़नेस तो क्लब में ही",
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: appPrimaryColor,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
                 const SizedBox(
@@ -158,20 +297,117 @@ class _RegistrationState extends State<Registration> {
                   ),
                 ),
                 const SizedBox(
+                  height: 10,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CatSubCatSelection(
+                          selectedList: selectedSubCatList,
+                        ),
+                      ),
+                    ).then((value) {
+                      if (value != null) {
+                        List finalList = [];
+                        for (var element in value) {
+                          for (var sub in element) {
+                            finalList.add(sub);
+                          }
+                        }
+                        setState(() {
+                          selectedSubCatList = value;
+                          finalSubList = finalList;
+                        });
+                      }
+                    });
+                  },
+                  child: AbsorbPointer(
+                    child: MyTextFormField(
+                      hintText: finalSubList.isNotEmpty
+                          ? "${finalSubList.length} selected"
+                          : "Select business category",
+                      keyboardType: TextInputType.number,
+                      label: "Business Category",
+                      validator: (phone) {
+                        if (finalSubList.isEmpty) {
+                          return 'Please select business category';
+                        }
+                        return null;
+                      },
+                      suffixIcon: const Icon(Icons.add),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Profile Photo",
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: appPrimaryColor,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(
+                  height: 6,
+                ),
+                InkWell(
+                  onTap: () {
+                    _imagePick();
+                  },
+                  child: pickedImage != null
+                      ? Image.file(
+                          pickedImage!,
+                          height: 80,
+                          width: 80,
+                        )
+                      : Container(
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade300,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          height: 60,
+                          width: 60,
+                          alignment: Alignment.center,
+                          child: const Icon(
+                            CupertinoIcons.person_alt,
+                            size: 26,
+                            color: Colors.grey,
+                          ),
+                        ),
+                ),
+                const SizedBox(
                   height: 25,
                 ),
-                RoundedElevatedButton(
-                  label: const Text(
-                    "Register",
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {}
-                  },
-                )
+                context.watch<AuthenticationProvider>().isLoading
+                    ? const Padding(
+                        padding: EdgeInsets.only(right: 30),
+                        child: Center(
+                            child: SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator())),
+                      )
+                    : RoundedElevatedButton(
+                        label: const Text(
+                          "Register",
+                          style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600),
+                        ),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            registerUser();
+                          }
+                        },
+                      ),
+                const SizedBox(
+                  height: 25,
+                ),
               ],
             ),
           ),

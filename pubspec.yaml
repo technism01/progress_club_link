@@ -29,7 +29,6 @@ dev_dependencies:
   provider: ^5.0.0
   shared_preferences: ^2.0.6
   image_picker: 0.8.4+4
-  image_cropper: 1.4.1
 
 flutter:
 

@@ -92,12 +92,7 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
             child: FloatingActionButton.extended(
               backgroundColor: appPrimaryColor,
               icon: const Icon(Icons.filter_list_rounded, color: Colors.white),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const CatSubCatSelection()));
-              },
+              onPressed: () {},
               label: const Text(
                 "Filter",
                 style:
