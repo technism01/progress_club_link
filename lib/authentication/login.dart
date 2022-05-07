@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:progress_club_link/authentication/registration.dart';
 import 'package:progress_club_link/common/constants.dart';
 import 'package:progress_club_link/widgets/my_textform_field.dart';
 import 'package:progress_club_link/widgets/rounded_elevatedbutton.dart';
@@ -18,6 +19,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF5F5F5),
       body: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20),
         child: Form(
@@ -25,6 +27,7 @@ class _LoginState extends State<Login> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Image.asset("assets/images/tagline.png", width: 500),
               Image.asset(
                 "assets/images/pc_logo.png",
                 height: 120,
@@ -32,27 +35,8 @@ class _LoginState extends State<Login> {
               const SizedBox(
                 height: 15,
               ),
-              Text(
-                "मेरा बिज़नेस तो क्लब में ही",
-                style: TextStyle(
-                  fontSize: 13,
-                  color: appPrimaryColor,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
               const SizedBox(
                 height: 35,
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Mobile Number",
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: appPrimaryColor,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
               ),
               const SizedBox(
                 height: 6,
@@ -61,6 +45,7 @@ class _LoginState extends State<Login> {
                 controller: txtMobileNumber,
                 hintText: "Enter your mobile number",
                 maxLength: 10,
+                label: "Mobile Number",
                 validator: (phone) {
                   Pattern pattern = r'(^(?:[+0]9)?[0-9]{10,}$)';
                   RegExp regExp = RegExp(pattern.toString());
@@ -92,8 +77,16 @@ class _LoginState extends State<Login> {
                   if (_formKey.currentState!.validate()) {}
                 },
               ),
+              const SizedBox(
+                height: 20,
+              ),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Registration()));
+                },
                 child: RichText(
                   text: const TextSpan(
                     text: "Not registered?",

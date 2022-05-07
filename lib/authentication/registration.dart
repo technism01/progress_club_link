@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:progress_club_link/common/PCChapters.dart';
 import 'package:progress_club_link/common/constants.dart';
+import 'package:progress_club_link/common/text_styles.dart';
 import 'package:progress_club_link/widgets/my_textform_field.dart';
 import 'package:progress_club_link/widgets/rounded_elevatedbutton.dart';
 
@@ -12,7 +14,10 @@ class Registration extends StatefulWidget {
 }
 
 class _RegistrationState extends State<Registration> {
+  TextEditingController txtName = TextEditingController();
   TextEditingController txtMobileNumber = TextEditingController();
+  TextEditingController txtChapter = TextEditingController();
+  TextEditingController txtCompanyName = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -46,24 +51,27 @@ class _RegistrationState extends State<Registration> {
               const SizedBox(
                 height: 35,
               ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Mobile Number",
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: appPrimaryColor,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+              MyTextFormField(
+                controller: txtName,
+                hintText: "Enter Name",
+                label: "Name",
+                keyboardType: TextInputType.name,
+                validator: (phone) {
+                  if (phone!.isEmpty) {
+                    return 'Please enter your name';
+                  }
+                  return null;
+                },
               ),
               const SizedBox(
-                height: 6,
+                height: 10,
               ),
               MyTextFormField(
                 controller: txtMobileNumber,
-                hintText: "Enter your mobile number",
+                hintText: "Enter Mobile Number",
                 maxLength: 10,
+                keyboardType: TextInputType.number,
+                label: "Mobile Number",
                 validator: (phone) {
                   Pattern pattern = r'(^(?:[+0]9)?[0-9]{10,}$)';
                   RegExp regExp = RegExp(pattern.toString());
@@ -81,11 +89,51 @@ class _RegistrationState extends State<Registration> {
                 ],
               ),
               const SizedBox(
+                height: 10,
+              ),
+              MyTextFormField(
+                controller: txtCompanyName,
+                hintText: "Enter Company Name",
+                keyboardType: TextInputType.text,
+                label: "Company Name",
+                validator: (phone) {
+                  if (phone!.isEmpty) {
+                    return 'Please enter company name';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              GestureDetector(
+                onTap: () {
+                  selectChapter((selectedValue) {
+                    txtChapter.text = selectedValue;
+                  });
+                },
+                child: AbsorbPointer(
+                  child: MyTextFormField(
+                    controller: txtChapter,
+                    hintText: "Select Chapter",
+                    keyboardType: TextInputType.number,
+                    label: "Select Your Chapter",
+                    validator: (phone) {
+                      if (phone!.isEmpty) {
+                        return 'Please select chapter';
+                      }
+                      return null;
+                    },
+                    suffixIcon: const Icon(Icons.arrow_drop_down),
+                  ),
+                ),
+              ),
+              const SizedBox(
                 height: 25,
               ),
               RoundedElevatedButton(
                 label: const Text(
-                  "Login",
+                  "Register",
                   style: TextStyle(
                       fontSize: 15,
                       color: Colors.white,
@@ -100,5 +148,49 @@ class _RegistrationState extends State<Registration> {
         ),
       ),
     );
+  }
+
+  selectChapter(Function(String value) onSelect) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Text("Select Chapter",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontFamily: "Poppins",
+                        fontSize: 15)),
+              ),
+              Expanded(
+                child: ListView.separated(
+                  itemCount: pcChapterList.length,
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () {
+                        onSelect(pcChapterList[index]);
+                        Navigator.pop(context);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Text(pcChapterList[index]),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return const Divider(
+                      height: 0.2,
+                      thickness: 0.4,
+                      endIndent: 10,
+                      indent: 10,
+                    );
+                  },
+                ),
+              ),
+            ],
+          );
+        });
   }
 }
