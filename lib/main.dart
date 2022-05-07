@@ -1,9 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:progress_club_link/authentication/login.dart';
 import 'package:progress_club_link/common/constants.dart';
+import 'package:progress_club_link/common/shared_preferences.dart';
+import 'package:progress_club_link/providers/authentication_provider.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
+final mySystemTheme = SystemUiOverlayStyle.dark.copyWith(
+  statusBarColor: Colors.white,
+  statusBarBrightness: Brightness.light,
+  statusBarIconBrightness: Brightness.dark,
+);
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setSystemUIOverlayStyle(mySystemTheme);
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
+  await sharedPrefs.init();
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => AuthenticationProvider(),
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

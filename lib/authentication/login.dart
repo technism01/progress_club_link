@@ -24,76 +24,88 @@ class _LoginState extends State<Login> {
         padding: const EdgeInsets.only(left: 20, right: 20),
         child: Form(
           key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset("assets/images/tagline.png", width: 500),
-              Image.asset(
-                "assets/images/pc_logo.png",
-                height: 120,
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              const SizedBox(
-                height: 35,
-              ),
-              const SizedBox(
-                height: 6,
-              ),
-              MyTextFormField(
-                controller: txtMobileNumber,
-                hintText: "Enter your mobile number",
-                maxLength: 10,
-                label: "Mobile Number",
-                validator: (phone) {
-                  Pattern pattern = r'(^(?:[+0]9)?[0-9]{10,}$)';
-                  RegExp regExp = RegExp(pattern.toString());
-                  if (phone!.isEmpty) {
-                    return 'Please enter mobile number';
-                  } else if (!regExp.hasMatch(phone)) {
-                    return 'Please enter valid mobile number';
-                  } else if (phone.length != 10) {
-                    return "Please enter valid mobile number";
-                  }
-                  return null;
-                },
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset("assets/images/tagline.png", width: 500),
+                  Image.asset(
+                    "assets/images/pc_logo.png",
+                    height: 120,
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  const SizedBox(
+                    height: 35,
+                  ),
+                  const SizedBox(
+                    height: 6,
+                  ),
+                  MyTextFormField(
+                    controller: txtMobileNumber,
+                    hintText: "Enter your mobile number",
+                    maxLength: 10,
+                    label: "Mobile Number",
+                    keyboardType: TextInputType.phone,
+                    validator: (phone) {
+                      Pattern pattern = r'(^(?:[+0]9)?[0-9]{10,}$)';
+                      RegExp regExp = RegExp(pattern.toString());
+                      if (phone!.isEmpty) {
+                        return 'Please enter mobile number';
+                      } else if (!regExp.hasMatch(phone)) {
+                        return 'Please enter valid mobile number';
+                      } else if (phone.length != 10) {
+                        return "Please enter valid mobile number";
+                      }
+                      return null;
+                    },
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  RoundedElevatedButton(
+                    label: const Text(
+                      "Login",
+                      style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Registration(),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Registration()));
+                    },
+                    child: RichText(
+                      text: const TextSpan(
+                        text: "Not registered?",
+                      ),
+                    ),
+                  ),
                 ],
               ),
-              const SizedBox(
-                height: 25,
-              ),
-              RoundedElevatedButton(
-                label: const Text(
-                  "Login",
-                  style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600),
-                ),
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {}
-                },
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const Registration()));
-                },
-                child: RichText(
-                  text: const TextSpan(
-                    text: "Not registered?",
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),
