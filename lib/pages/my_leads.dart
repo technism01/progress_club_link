@@ -6,17 +6,17 @@ import 'package:progress_club_link/common/constants.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../common/text_styles.dart';
+import '../component/myLeadList.dart';
 import '../component/myRequirementList.dart';
 
-class MyRequirement extends StatefulWidget {
-  const MyRequirement({Key? key}) : super(key: key);
+class MyLead extends StatefulWidget {
+  const MyLead({Key? key}) : super(key: key);
 
   @override
-  State<MyRequirement> createState() => _MyRequirementState();
+  State<MyLead> createState() => _MyLeadState();
 }
 
-class _MyRequirementState extends State<MyRequirement>
-    with TickerProviderStateMixin {
+class _MyLeadState extends State<MyLead> with TickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -144,7 +144,7 @@ class _MyRequirementState extends State<MyRequirement>
                   ),
                 ),
               ),
-              content: MyRequirementList(memberList: subCategoryList));
+              content: MyLeadList(memberList: subCategoryList));
         });
   }
 }
