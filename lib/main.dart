@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:progress_club_link/authentication/login.dart';
 import 'package:progress_club_link/common/constants.dart';
 import 'package:progress_club_link/common/shared_preferences.dart';
+import 'package:progress_club_link/pages/dashboard.dart';
 import 'package:progress_club_link/providers/authentication_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -14,7 +15,6 @@ final mySystemTheme = SystemUiOverlayStyle.dark.copyWith(
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setSystemUIOverlayStyle(mySystemTheme);
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const Login(),
+      home: const Dashboard(),
     );
   }
 }

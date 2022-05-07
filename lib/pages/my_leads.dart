@@ -91,16 +91,15 @@ class _MyLeadState extends State<MyLead> with TickerProviderStateMixin {
                   fontSize: 11,
                 ),
                 indicator: BubbleTabIndicator(
-                    indicatorHeight: 36,
+                    indicatorHeight: 40,
                     indicatorColor: appPrimaryColor,
                     tabBarIndicatorSize: TabBarIndicatorSize.tab,
                     indicatorRadius: 5),
                 tabs: businessList.map((e) {
                   return Container(
-                    height: 34,
-                    width: 100,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                    height: 38,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 10),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5),
                         border: Border.all(color: appPrimaryColor)),

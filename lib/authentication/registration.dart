@@ -186,6 +186,7 @@ class _RegistrationState extends State<Registration> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: const Color(0xFFF5F5F5),
       body: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20),
         child: Form(

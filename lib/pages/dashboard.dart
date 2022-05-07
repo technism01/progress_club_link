@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:progress_club_link/pages/my_leads.dart';
 import 'package:progress_club_link/pages/my_requirements.dart';
+import 'package:progress_club_link/pages/profile_update.dart';
 
 import '../common/TabIndicator.dart';
 import '../common/constants.dart';
@@ -21,6 +22,7 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   late TabController tabController;
   bool showFab = true;
+  var scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -37,6 +39,46 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        key: scaffoldKey,
+        drawerEnableOpenDragGesture: false,
+        drawer: Drawer(
+          child: ListView(
+            children: <Widget>[
+              Container(
+                height: 130,
+                color: Colors.grey.shade100,
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Image.asset(
+                    "assets/images/pc_logo.png",
+                    height: 100,
+                  ),
+                ),
+              ),
+              ListTile(
+                leading: const Icon(CupertinoIcons.person_alt),
+                title: const Text('Profile'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ProfileUpdate()));
+                },
+              ),
+              const Divider(
+                indent: 10,
+                endIndent: 10,
+                height: 1,
+              ),
+              ListTile(
+                leading: const Icon(Icons.login_rounded),
+                title: const Text('Logout'),
+                onTap: () {},
+              ),
+            ],
+          ),
+        ),
         appBar: AppBar(
           elevation: 1,
           centerTitle: true,
@@ -44,9 +86,13 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
             "Let's Grow Together",
             style: MyTextStyles.semiBold.copyWith(
               fontSize: 16,
-              color: Colors.white,
             ),
           ),
+          leading: IconButton(
+              onPressed: () {
+                scaffoldKey.currentState!.openDrawer();
+              },
+              icon: const Icon(Icons.menu_rounded)),
         ),
         body: NotificationListener<UserScrollNotification>(
           onNotification: (notification) {
