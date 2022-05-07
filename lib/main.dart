@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:progress_club_link/authentication/login.dart';
 import 'package:progress_club_link/common/constants.dart';
+import 'package:progress_club_link/pages/dashboard.dart';
+import 'package:progress_club_link/pages/my_requirements.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,10 +20,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'Poppins',
         colorScheme: ColorScheme.light(
-          primary: appPrimaryColor,
-        ),
+            primary: appPrimaryColor, secondary: appPrimaryColor),
       ),
-      home: const Login(),
+      home: const Dashboard(),
     );
   }
 }
