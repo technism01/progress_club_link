@@ -85,7 +85,7 @@ class AuthenticationProvider extends ChangeNotifier {
 
     //body Data
     var data = {
-      "mobile_number": mobileNo,
+      "mobileNumber": mobileNo,
     };
 
     //Response
@@ -101,7 +101,6 @@ class AuthenticationProvider extends ChangeNotifier {
           return status == 404 || status == 200;
         }),
       );
-      log("-> ${response.statusCode}");
       if (response.statusCode == 200) {
         responseClass.success = true;
         responseClass.message = response.data["msg"];

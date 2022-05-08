@@ -6,7 +6,6 @@ class MemberModel {
   String companyName;
   String? email;
   String? profile;
-  List<int> subCategoryIds;
   String token;
 
   MemberModel(
@@ -17,7 +16,6 @@ class MemberModel {
       required this.companyName,
       required this.pcGroup,
       this.profile,
-      required this.subCategoryIds,
       required this.token});
 
   factory MemberModel.fromJson(Map<String, dynamic> json, String token) =>
@@ -28,7 +26,6 @@ class MemberModel {
         email: json["email"],
         pcGroup: json["pcGroup"],
         companyName: json["companyName"],
-        subCategoryIds: json["subCategoryIds"],
         token: token,
       );
 }

@@ -74,57 +74,61 @@ class _MyRequirementState extends State<MyRequirement>
     return DefaultTabController(
       length: businessList.length,
       child: Scaffold(
-          body: Padding(
-        padding: const EdgeInsets.only(left: 5.0, right: 5),
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 10,
-            ),
-            TabBar(
-                indicatorSize: TabBarIndicatorSize.tab,
-                controller: _tabController,
-                labelPadding: const EdgeInsets.symmetric(horizontal: 5),
-                isScrollable: true,
-                unselectedLabelColor: appPrimaryColor,
-                unselectedLabelStyle: MyTextStyles.medium.copyWith(
-                  fontSize: 11,
-                ),
-                indicator: BubbleTabIndicator(
-                    indicatorHeight: 36,
-                    indicatorColor: appPrimaryColor,
-                    tabBarIndicatorSize: TabBarIndicatorSize.tab,
-                    indicatorRadius: 5),
-                tabs: businessList.map((e) {
-                  return Container(
-                    height: 34,
-                    width: 100,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(color: appPrimaryColor)),
-                    child: Center(
-                      child: Text(e,
-                          style: MyTextStyles.medium.copyWith(
-                            fontSize: 12,
-                          )),
-                    ),
-                  );
-                }).toList()),
-            Expanded(
-              child: TabBarView(controller: _tabController, children: [
-                tabBarView(),
-                tabBarView(),
-                tabBarView(),
-                tabBarView(),
-                tabBarView(),
-                tabBarView(),
-              ]),
-            )
-          ],
+        body: Padding(
+          padding: const EdgeInsets.only(left: 5.0, right: 5),
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              TabBar(
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  controller: _tabController,
+                  labelPadding: const EdgeInsets.symmetric(horizontal: 5),
+                  isScrollable: true,
+                  unselectedLabelColor: appPrimaryColor,
+                  unselectedLabelStyle: MyTextStyles.medium.copyWith(
+                    fontSize: 11,
+                  ),
+                  indicator: BubbleTabIndicator(
+                      indicatorHeight: 36,
+                      indicatorColor: appPrimaryColor,
+                      tabBarIndicatorSize: TabBarIndicatorSize.tab,
+                      indicatorRadius: 5),
+                  tabs: businessList.map((e) {
+                    return Container(
+                      height: 34,
+                      width: 100,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 8),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: appPrimaryColor)),
+                      child: Center(
+                        child: Text(e,
+                            style: MyTextStyles.medium.copyWith(
+                              fontSize: 12,
+                            )),
+                      ),
+                    );
+                  }).toList()),
+              const SizedBox(
+                height: 10,
+              ),
+              Expanded(
+                child: TabBarView(controller: _tabController, children: [
+                  tabBarView(),
+                  tabBarView(),
+                  tabBarView(),
+                  tabBarView(),
+                  tabBarView(),
+                  tabBarView(),
+                ]),
+              )
+            ],
+          ),
         ),
-      )),
+      ),
     );
   }
 

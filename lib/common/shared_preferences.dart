@@ -31,9 +31,6 @@ class SharedPrefs {
 
   String get profile => _sharedPrefs!.getString(StringConstants.profile) ?? "";
 
-  String get subCategoryIds =>
-      _sharedPrefs!.getString(StringConstants.subCategoryIds) ?? "";
-
   //setters
   set memberId(int value) {
     _sharedPrefs!.setInt(StringConstants.memberId, value);
@@ -57,10 +54,6 @@ class SharedPrefs {
 
   set profile(String value) {
     _sharedPrefs!.setString(StringConstants.profile, value);
-  }
-
-  set subCategoryIds(String value) {
-    _sharedPrefs!.setString(StringConstants.subCategoryIds, value);
   }
 
   set companyName(String value) {

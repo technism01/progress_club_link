@@ -1,9 +1,16 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:progress_club_link/authentication/registration.dart';
 import 'package:progress_club_link/common/constants.dart';
+import 'package:progress_club_link/component/loading_component.dart';
+import 'package:progress_club_link/helper_functions/save_user_in_local.dart';
+import 'package:progress_club_link/pages/dashboard.dart';
+import 'package:progress_club_link/providers/authentication_provider.dart';
 import 'package:progress_club_link/widgets/my_textform_field.dart';
 import 'package:progress_club_link/widgets/rounded_elevatedbutton.dart';
+import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -15,6 +22,24 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   TextEditingController txtMobileNumber = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  login() async {
+    context
+        .read<AuthenticationProvider>()
+        .loginUser(mobileNo: txtMobileNumber.text)
+        .then((value) {
+      if (value.success) {
+        saveUserInLocal(value.data!);
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const Dashboard(),
+          ),
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,25 +93,22 @@ class _LoginState extends State<Login> {
                   const SizedBox(
                     height: 25,
                   ),
-                  RoundedElevatedButton(
-                    label: const Text(
-                      "Login",
-                      style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const Registration(),
+                  context.watch<AuthenticationProvider>().isLoading
+                      ? const LoadingComponent()
+                      : RoundedElevatedButton(
+                          label: const Text(
+                            "Login",
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600),
                           ),
-                        );
-                      }
-                    },
-                  ),
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              login();
+                            }
+                          },
+                        ),
                   const SizedBox(
                     height: 20,
                   ),

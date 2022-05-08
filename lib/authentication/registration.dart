@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -7,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:progress_club_link/common/PCChapters.dart';
 import 'package:progress_club_link/common/constants.dart';
 import 'package:progress_club_link/common/text_styles.dart';
+import 'package:progress_club_link/component/loading_component.dart';
 import 'package:progress_club_link/helper_functions/save_user_in_local.dart';
 import 'package:progress_club_link/pages/cat_subcat_selection.dart';
 import 'package:progress_club_link/providers/authentication_provider.dart';
@@ -157,15 +159,17 @@ class _RegistrationState extends State<Registration> {
   registerUser() async {
     FormData data = FormData.fromMap({
       "name": txtName.text,
-      "mobile": txtMobileNumber.text,
+      "mobileNumber": txtMobileNumber.text,
       "companyName": txtCompanyName.text,
       "pcGroup": txtChapter.text,
-      "subCategoryIds": finalSubList,
+      "subCategoryIds": json.encode(finalSubList),
     });
+
     if (pickedImage != null) {
       data.files.add(
           MapEntry("profile", await MultipartFile.fromFile(pickedImage!.path)));
     }
+    log("${data.fields}");
     context
         .read<AuthenticationProvider>()
         .registerUser(data: data)
@@ -384,14 +388,7 @@ class _RegistrationState extends State<Registration> {
                   height: 25,
                 ),
                 context.watch<AuthenticationProvider>().isLoading
-                    ? const Padding(
-                        padding: EdgeInsets.only(right: 30),
-                        child: Center(
-                            child: SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator())),
-                      )
+                    ? const LoadingComponent()
                     : RoundedElevatedButton(
                         label: const Text(
                           "Register",

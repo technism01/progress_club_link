@@ -11,7 +11,6 @@ class StringConstants {
   static const String email = "email";
   static const String pcGroup = "pcGroup";
   static const String profile = "profile";
-  static const String subCategoryIds = "subCategoryIds";
   static const String token = "token";
 
   /*Api Names*/

@@ -88,6 +88,23 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
               fontSize: 16,
             ),
           ),
+          actions: [
+            TextButton(
+              onPressed: () {},
+              child: Row(
+                children: const [
+                  Icon(
+                    Icons.add,
+                    size: 18,
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text("Need"),
+                ],
+              ),
+            ),
+          ],
           leading: IconButton(
               onPressed: () {
                 scaffoldKey.currentState!.openDrawer();
@@ -118,10 +135,7 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                   indicator:
                       CustomTabIndicator(color: appPrimaryColor, height: 4),
                   controller: tabController,
-                  tabs: const [
-                    Tab(text: "  My Leads  "),
-                    Tab(text: "  My Needs  ")
-                  ]),
+                  tabs: const [Tab(text: "My Leads"), Tab(text: "My Needs")]),
               Expanded(
                   child: TabBarView(
                       controller: tabController,
@@ -129,24 +143,27 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
             ],
           ),
         ),
-        floatingActionButton: AnimatedSlide(
-          duration: const Duration(milliseconds: 300),
-          offset: showFab ? Offset.zero : const Offset(0, 2),
-          child: AnimatedOpacity(
-            duration: const Duration(milliseconds: 300),
-            opacity: showFab ? 1 : 0,
-            child: FloatingActionButton.extended(
-              backgroundColor: appPrimaryColor,
-              icon: const Icon(Icons.filter_list_rounded, color: Colors.white),
-              onPressed: () {},
-              label: const Text(
-                "Filter",
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-              ),
-            ),
-          ),
-        ),
+        // floatingActionButton: tabController.index == 1
+        //     ? AnimatedSlide(
+        //         duration: const Duration(milliseconds: 300),
+        //         offset: showFab ? Offset.zero : const Offset(0, 2),
+        //         child: AnimatedOpacity(
+        //           duration: const Duration(milliseconds: 300),
+        //           opacity: showFab ? 1 : 0,
+        //           child: FloatingActionButton.extended(
+        //             backgroundColor: appPrimaryColor,
+        //             icon: const Icon(Icons.filter_list_rounded,
+        //                 color: Colors.white),
+        //             onPressed: () {},
+        //             label: const Text(
+        //               "Filter",
+        //               style: TextStyle(
+        //                   color: Colors.white, fontWeight: FontWeight.w600),
+        //             ),
+        //           ),
+        //         ),
+        //       )
+        //     : null,
       ),
     );
   }

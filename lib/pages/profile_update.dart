@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:progress_club_link/common/shared_preferences.dart';
 import 'package:progress_club_link/common/text_styles.dart';
 
 import '../common/PCChapters.dart';
@@ -23,6 +24,14 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
   List<List> selectedSubCatList = [];
   List finalSubList = [];
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    txtName.text = sharedPrefs.memberName;
+    txtMobileNumber.text = sharedPrefs.mobileNo;
+    txtCompanyName.text = sharedPrefs.companyName;
+    txtChapter.text = sharedPrefs.pcGroup;
+  }
 
   @override
   Widget build(BuildContext context) {
