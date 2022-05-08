@@ -55,18 +55,15 @@ class _LoginState extends State<Login> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset("assets/images/tagline.png", width: 500),
+                  const SizedBox(
+                    height: 35,
+                  ),
                   Image.asset(
                     "assets/images/pc_logo.png",
                     height: 120,
                   ),
                   const SizedBox(
-                    height: 15,
-                  ),
-                  const SizedBox(
                     height: 35,
-                  ),
-                  const SizedBox(
-                    height: 6,
                   ),
                   MyTextFormField(
                     controller: txtMobileNumber,
