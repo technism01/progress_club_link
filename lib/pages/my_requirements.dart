@@ -122,7 +122,7 @@ class _MyRequirementState extends State<MyRequirement>
                     ),
                   )
                 : const EmptyScreen(
-                    title: "No Leads Found", image: "assets/images/user.png"),
+                    title: "No Need Added", image: "assets/images/user.png"),
       ),
     );
   }

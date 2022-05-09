@@ -46,10 +46,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Sharing Link',
+      title: 'Progress Club',
       theme: ThemeData(
         fontFamily: 'Poppins',
+        primarySwatch: MaterialColor(0xff3a325f, appPrimaryColorSwatch),
         colorScheme: ColorScheme.light(
+          secondary: appPrimaryColor,
           primary: appPrimaryColor,
         ),
         appBarTheme: AppBarTheme(
