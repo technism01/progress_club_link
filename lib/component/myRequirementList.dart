@@ -32,7 +32,7 @@ class _MyRequirementListState extends State<MyRequirementList> {
               height: 70,
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey.shade200, width: 0.8),
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(8),
                 //    color: Colors.grey.withOpacity(0.1)
               ),
               child: Padding(
@@ -45,15 +45,21 @@ class _MyRequirementListState extends State<MyRequirementList> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(30),
                           child: e.profile == null
-                              ? Image.asset("assets/images/user.png")
+                              ? Image.asset(
+                                  "assets/images/user.png",
+                                  height: 60,
+                                  width: 60,
+                                )
                               : Image.network(
                                   StringConstants.imageUrl + "${e.profile}",
                                   fit: BoxFit.fill,
+                                  height: 60,
+                                  width: 60,
                                   errorBuilder: (BuildContext context,
                                       Object exception,
                                       StackTrace? stackTrace) {
-                                    return Image.asset(
-                                        "assets/images/user.png");
+                                    return Image.asset("assets/images/user.png",
+                                        height: 60, width: 60);
                                   },
                                 ),
                         ),

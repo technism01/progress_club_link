@@ -155,6 +155,7 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                           context,
                           MaterialPageRoute(
                             builder: (context) => CatSubCatSelection(
+                              title: "Search Your Need",
                               categoryList: value.data!,
                               selectedList: const [],
                               isFromDashboard: true,
@@ -167,13 +168,14 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
               child: Row(
                 children: const [
                   Icon(
-                    Icons.add,
+                    Icons.add_box_rounded,
                     size: 18,
                   ),
                   SizedBox(
                     width: 5,
                   ),
-                  Text("Need"),
+                  Text("Connect"),
+                  SizedBox(width: 10)
                 ],
               ),
             ),

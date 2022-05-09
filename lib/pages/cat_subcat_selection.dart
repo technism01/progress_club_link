@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_club_link/common/constants.dart';
 import 'package:progress_club_link/common/vertical_tab.dart';
@@ -9,15 +10,19 @@ import 'package:progress_club_link/model/category_model.dart';
 import 'package:progress_club_link/providers/category_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../common/text_styles.dart';
+
 class CatSubCatSelection extends StatefulWidget {
   final List<CategoryModel> categoryList;
   final List<CategorySubCategoryModel> selectedList;
   final bool isFromDashboard;
+  final String title;
 
   const CatSubCatSelection(
       {Key? key,
       required this.categoryList,
       required this.selectedList,
+      required this.title,
       required this.isFromDashboard})
       : super(key: key);
 
@@ -70,7 +75,17 @@ class _CatSubCatSelectionState extends State<CatSubCatSelection> {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Choose Profession"),
+        title: Text(widget.title,
+            style: MyTextStyles.semiBold.copyWith(
+              fontSize: 16,
+            )),
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(CupertinoIcons.back)),
         actions: [
           if (!isEmptyList)
             TextButton(
@@ -159,8 +174,7 @@ class _CatSubCatSelectionState extends State<CatSubCatSelection> {
                     selectedSubCategories[index].subIdList = list;
                   } else {
                     selectedSubCategories.add(CategorySubCategoryModel(
-                        id: widget.categoryList[i].id,
-                        subIdList: list));
+                        id: widget.categoryList[i].id, subIdList: list));
                   }
                 });
                 for (var element in selectedSubCategories) {

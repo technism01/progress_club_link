@@ -265,14 +265,17 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                         ? file1 != null
                             ? CircleAvatar(
                                 radius: 60,
+                                backgroundColor: Colors.grey,
                                 backgroundImage: MemoryImage(file1!))
                             : const CircleAvatar(
                                 radius: 60,
+                                backgroundColor: Colors.grey,
                                 backgroundImage: AssetImage("images/user.png"))
                         : CircleAvatar(
                             radius: 60,
+                            backgroundColor: Colors.grey,
                             backgroundImage: NetworkImage(
-                                StringConstants.apiUrl + profileImage))),
+                                StringConstants.imageUrl + profileImage))),
                 MyTextFormField(
                   controller: txtName,
                   hintText: "Enter Name",
@@ -365,6 +368,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => CatSubCatSelection(
+                                  title: "Select Your Category",
                                   categoryList: value.data!,
                                   selectedList: selectedSubCatList,
                                   isFromDashboard: false,

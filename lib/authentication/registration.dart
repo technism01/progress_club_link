@@ -342,6 +342,7 @@ class _RegistrationState extends State<Registration> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => CatSubCatSelection(
+                                  title: "Select Your Category",
                                   categoryList: value.data!,
                                   selectedList: selectedSubCatList,
                                   isFromDashboard: false,

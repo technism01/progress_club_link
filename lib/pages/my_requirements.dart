@@ -67,6 +67,7 @@ class _MyRequirementState extends State<MyRequirement>
                 ? Padding(
                     padding: const EdgeInsets.only(left: 5.0, right: 5),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(
                           height: 10,
