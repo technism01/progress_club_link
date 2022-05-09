@@ -343,7 +343,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                 const SizedBox(
                   height: 10,
                 ),
-/*
+
                 GestureDetector(
                   onTap: () async {
                     await context
@@ -412,7 +412,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                     ),
                   ),
                 ),
-*/
+
                 const SizedBox(
                   height: 20,
                 ),

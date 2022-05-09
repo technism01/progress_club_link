@@ -25,7 +25,7 @@ class MyLead extends StatefulWidget {
 
 class _MyLeadState extends State<MyLead> with TickerProviderStateMixin {
   late TabController _tabController;
-  List<Category> myLeadList=[];
+  List myLeadList=[];
 
   @override
   void initState() {
