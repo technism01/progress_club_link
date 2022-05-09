@@ -89,10 +89,9 @@ class _MyRequirementListState extends State<MyRequirementList> {
                       children: [
                         InkWell(
                           onTap: () async {
-                            const url = WhatsAppUnilink(
-                              phoneNumber: '+919429828152',
-                              text:
-                                  "Hey! I'm inquiring about the apartment listing",
+                            var url = WhatsAppUnilink(
+                              phoneNumber: '+91${e.mobileNumber}',
+                              text: "Hey",
                             );
 
                             await launchUrl(Uri.parse('$url'));
@@ -107,7 +106,7 @@ class _MyRequirementListState extends State<MyRequirementList> {
                         ),
                         InkWell(
                           onTap: () {
-                            launchUrl(Uri.parse("tel://9429828152"));
+                            launchUrl(Uri.parse("tel://${e.mobileNumber}"));
                           },
                           child: const Padding(
                               padding: EdgeInsets.only(right: 2),

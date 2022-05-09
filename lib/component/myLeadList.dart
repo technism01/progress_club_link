@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:whatsapp_unilink/whatsapp_unilink.dart';
 
 import '../common/constants.dart';
+import '../common/string_constants.dart';
 import '../common/text_styles.dart';
 import '../model/mylead_model.dart';
 
@@ -45,8 +46,14 @@ class _MyLeadListState extends State<MyLeadList> {
                           child: e.profile == null
                               ? Image.asset("assets/images/user.png")
                               : Image.network(
-                                  "",
+                                  StringConstants.imageUrl + "${e.profile}",
                                   fit: BoxFit.fill,
+                                  errorBuilder: (BuildContext context,
+                                      Object exception,
+                                      StackTrace? stackTrace) {
+                                    return Image.asset(
+                                        "assets/images/user.png");
+                                  },
                                 ),
                         ),
                         Padding(
@@ -81,10 +88,9 @@ class _MyLeadListState extends State<MyLeadList> {
                       children: [
                         InkWell(
                           onTap: () async {
-                            const url = WhatsAppUnilink(
-                              phoneNumber: '+919429828152',
-                              text:
-                                  "Hey! I'm inquiring about the apartment listing",
+                            var url = WhatsAppUnilink(
+                              phoneNumber: '+91${e.mobileNumber}',
+                              text: "Hey",
                             );
 
                             await launchUrl(Uri.parse('$url'));
@@ -99,7 +105,7 @@ class _MyLeadListState extends State<MyLeadList> {
                         ),
                         InkWell(
                           onTap: () {
-                            launchUrl(Uri.parse("tel://9429828152"));
+                            launchUrl(Uri.parse("tel://${e.mobileNumber}"));
                           },
                           child: const Padding(
                               padding: EdgeInsets.only(right: 2),
