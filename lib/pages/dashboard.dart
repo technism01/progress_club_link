@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -152,15 +154,18 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                   if (value.success) {
                     if (value.data != null) {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CatSubCatSelection(
-                              title: "Search Your Need",
-                              categoryList: value.data!,
-                              selectedList: const [],
-                              isFromDashboard: true,
-                            ),
-                          ));
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CatSubCatSelection(
+                            title: "Search Your Need",
+                            categoryList: value.data!,
+                            selectedList: const [],
+                            isFromDashboard: true,
+                          ),
+                        ),
+                      ).then((value) {
+                        setState(() {});
+                      });
                     }
                   }
                 });
@@ -218,27 +223,6 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
             ],
           ),
         ),
-        // floatingActionButton: tabController.index == 1
-        //     ? AnimatedSlide(
-        //         duration: const Duration(milliseconds: 300),
-        //         offset: showFab ? Offset.zero : const Offset(0, 2),
-        //         child: AnimatedOpacity(
-        //           duration: const Duration(milliseconds: 300),
-        //           opacity: showFab ? 1 : 0,
-        //           child: FloatingActionButton.extended(
-        //             backgroundColor: appPrimaryColor,
-        //             icon: const Icon(Icons.filter_list_rounded,
-        //                 color: Colors.white),
-        //             onPressed: () {},
-        //             label: const Text(
-        //               "Filter",
-        //               style: TextStyle(
-        //                   color: Colors.white, fontWeight: FontWeight.w600),
-        //             ),
-        //           ),
-        //         ),
-        //       )
-        //     : null,
       ),
     );
   }

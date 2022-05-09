@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/cupertino.dart';
@@ -37,6 +38,7 @@ class _MyRequirementState extends State<MyRequirement>
   }
 
   getMyNeeds() async {
+    log("call -->");
     context
         .read<LeadRequirementProvider>()
         .getMyNeeds(memberID: sharedPrefs.memberId)
@@ -49,7 +51,6 @@ class _MyRequirementState extends State<MyRequirement>
             _tabController =
                 TabController(length: myNeedList.length, vsync: this);
           });
-
           print(myNeedList.length);
         }
       }
