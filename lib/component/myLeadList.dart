@@ -7,9 +7,10 @@ import 'package:whatsapp_unilink/whatsapp_unilink.dart';
 
 import '../common/constants.dart';
 import '../common/text_styles.dart';
+import '../model/mylead_model.dart';
 
 class MyLeadList extends StatefulWidget {
-  final List memberList;
+  final List<MyLeadMembers> memberList;
   const MyLeadList({required this.memberList, Key? key}) : super(key: key);
 
   @override
@@ -41,10 +42,12 @@ class _MyLeadListState extends State<MyLeadList> {
                       children: [
                         ClipRRect(
                           borderRadius: BorderRadius.circular(30),
-                          child: Image.network(
-                            e["img"],
-                            fit: BoxFit.fill,
-                          ),
+                          child: e.profile == null
+                              ? Image.asset("assets/images/user.png")
+                              : Image.network(
+                                  "",
+                                  fit: BoxFit.fill,
+                                ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 20.0),
@@ -53,7 +56,7 @@ class _MyLeadListState extends State<MyLeadList> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                e["name"],
+                                e.name!,
                                 style: MyTextStyles.semiBold.copyWith(
                                   fontSize: 14,
                                   color: appPrimaryColor,
@@ -62,7 +65,7 @@ class _MyLeadListState extends State<MyLeadList> {
                               Padding(
                                 padding: const EdgeInsets.only(top: 1.0),
                                 child: Text(
-                                  e["bname"],
+                                  e.companyName!,
                                   style: MyTextStyles.semiBold.copyWith(
                                     fontSize: 12,
                                     color: Colors.black.withOpacity(0.5),

@@ -1,5 +1,5 @@
-class LeadCategoryModel {
-  LeadCategoryModel({
+class NeedCategoryModel {
+  NeedCategoryModel({
     this.id,
     this.name,
     this.subCategory,
@@ -7,19 +7,19 @@ class LeadCategoryModel {
 
   int? id;
   String? name;
-  List<LeadSubCategory>? subCategory;
+  List<NeedSubCategoryModel>? subCategory;
 
-  factory LeadCategoryModel.fromJson(Map<String, dynamic> json) =>
-      LeadCategoryModel(
+  factory NeedCategoryModel.fromJson(Map<String, dynamic> json) =>
+      NeedCategoryModel(
         id: json["id"],
         name: json["name"],
-        subCategory: List<LeadSubCategory>.from(
-            json["SubCategory"].map((x) => LeadSubCategory.fromJson(x))),
+        subCategory: List<NeedSubCategoryModel>.from(
+            json["SubCategory"].map((x) => NeedSubCategoryModel.fromJson(x))),
       );
 }
 
-class LeadSubCategory {
-  LeadSubCategory({
+class NeedSubCategoryModel {
+  NeedSubCategoryModel({
     this.id,
     this.name,
     this.member,
@@ -27,19 +27,19 @@ class LeadSubCategory {
 
   int? id;
   String? name;
-  List<MyLeadMembers>? member;
+  List<MyNeedMember>? member;
 
-  factory LeadSubCategory.fromJson(Map<String, dynamic> json) =>
-      LeadSubCategory(
+  factory NeedSubCategoryModel.fromJson(Map<String, dynamic> json) =>
+      NeedSubCategoryModel(
         id: json["id"],
         name: json["name"],
-        member: List<MyLeadMembers>.from(
-            json["Member"].map((x) => MyLeadMembers.fromJson(x))),
+        member: List<MyNeedMember>.from(
+            json["Member"].map((x) => MyNeedMember.fromJson(x))),
       );
 }
 
-class MyLeadMembers {
-  MyLeadMembers({
+class MyNeedMember {
+  MyNeedMember({
     this.id,
     this.name,
     this.mobileNumber,
@@ -55,7 +55,7 @@ class MyLeadMembers {
   String? companyName;
   String? profile;
 
-  factory MyLeadMembers.fromJson(Map<String, dynamic> json) => MyLeadMembers(
+  factory MyNeedMember.fromJson(Map<String, dynamic> json) => MyNeedMember(
         id: json["id"],
         name: json["name"],
         mobileNumber: json["mobileNumber"],

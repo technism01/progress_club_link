@@ -1,6 +1,8 @@
 class StringConstants {
   /*Api url*/
   static const String apiUrl = "http://192.168.1.50:8000/api/";
+  static const String imageUrl = "http://192.168.1.50:8000/";
+
   static const String errorMessage = "Something went wrong";
 
   /* shared preference keys */

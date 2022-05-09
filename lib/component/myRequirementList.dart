@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:progress_club_link/common/string_constants.dart';
+import 'package:progress_club_link/model/myneed_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:whatsapp_unilink/whatsapp_unilink.dart';
 
@@ -9,7 +11,7 @@ import '../common/constants.dart';
 import '../common/text_styles.dart';
 
 class MyRequirementList extends StatefulWidget {
-  final List memberList;
+  final List<MyNeedMember> memberList;
   const MyRequirementList({required this.memberList, Key? key})
       : super(key: key);
 
@@ -42,10 +44,18 @@ class _MyRequirementListState extends State<MyRequirementList> {
                       children: [
                         ClipRRect(
                           borderRadius: BorderRadius.circular(30),
-                          child: Image.network(
-                            e["img"],
-                            fit: BoxFit.fill,
-                          ),
+                          child: e.profile == null
+                              ? Image.asset("assets/images/user.png")
+                              : Image.network(
+                                  StringConstants.imageUrl + "${e.profile}",
+                                  fit: BoxFit.fill,
+                                  errorBuilder: (BuildContext context,
+                                      Object exception,
+                                      StackTrace? stackTrace) {
+                                    return Image.asset(
+                                        "assets/images/user.png");
+                                  },
+                                ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 20.0),
@@ -54,7 +64,7 @@ class _MyRequirementListState extends State<MyRequirementList> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                e["name"],
+                                e.name!,
                                 style: MyTextStyles.semiBold.copyWith(
                                   fontSize: 14,
                                   color: appPrimaryColor,
@@ -63,7 +73,7 @@ class _MyRequirementListState extends State<MyRequirementList> {
                               Padding(
                                 padding: const EdgeInsets.only(top: 1.0),
                                 child: Text(
-                                  e["bname"],
+                                  e.companyName!,
                                   style: MyTextStyles.semiBold.copyWith(
                                     fontSize: 12,
                                     color: Colors.black.withOpacity(0.5),
