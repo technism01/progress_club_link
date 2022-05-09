@@ -3,11 +3,22 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:progress_club_link/common/constants.dart';
 import 'package:progress_club_link/common/vertical_tab.dart';
+import 'package:progress_club_link/helper_functions/SelectedCategoryTOCategorySubCate.dart';
+import 'package:progress_club_link/helper_functions/getSelectedSubList.dart';
+import 'package:progress_club_link/model/category_model.dart';
+import 'package:progress_club_link/providers/category_provider.dart';
+import 'package:provider/provider.dart';
 
 class CatSubCatSelection extends StatefulWidget {
-  final List<List> selectedList;
+  final List<CategoryModel> categoryList;
+  final List<CategorySubCategoryModel> selectedList;
+  final bool isFromDashboard;
 
-  const CatSubCatSelection({Key? key, required this.selectedList})
+  const CatSubCatSelection(
+      {Key? key,
+      required this.categoryList,
+      required this.selectedList,
+      required this.isFromDashboard})
       : super(key: key);
 
   @override
@@ -15,49 +26,43 @@ class CatSubCatSelection extends StatefulWidget {
 }
 
 class _CatSubCatSelectionState extends State<CatSubCatSelection> {
-  List list = [
-    {
-      "categoryName": "IT & Software",
-      "subCategoryList": [
-        {
-          "id": 1,
-          "name": "Mobile Software",
-        },
-        {
-          "id": 2,
-          "name": "Web Software",
-        },
-        {
-          "id": 3,
-          "name": "UI/UX Designing",
-        }
-      ]
-    },
-    {
-      "categoryName": "Taxtile",
-      "subCategoryList": [
-        {
-          "id": 4,
-          "name": "Less Material",
-        },
-        {
-          "id": 5,
-          "name": "Embroidery Machine",
-        },
-      ]
-    }
-  ];
+  List<CategorySubCategoryModel> selectedSubCategories = [];
 
-  List<List> selectedSubCategories = [[], []];
+  List<AddCategoryModel> sendList = [];
   bool isEmptyList = true;
 
   @override
   void initState() {
-    super.initState();
     if (widget.selectedList.isNotEmpty) {
       selectedSubCategories = widget.selectedList;
-      isEmptyList = false;
+    } else {
+      selectedSubCategories = List.generate(
+          widget.categoryList.length,
+          (index) => CategorySubCategoryModel(
+              id: widget.categoryList[index].id, subIdList: []));
     }
+    if (widget.isFromDashboard) {
+      Future.delayed(const Duration(milliseconds: 0)).then((value) {
+        loadData();
+      });
+    }
+
+    super.initState();
+  }
+
+  loadData() async {
+    await context
+        .read<CategoryProvider>()
+        .getCategorySubcategory()
+        .then((value) {
+      if (value.success) {
+        if (value.data != null) {
+          selectedSubCategories =
+              selectedCategoryTOCategorySubCate(value.data!);
+          setState(() {});
+        }
+      }
+    });
   }
 
   @override
@@ -70,7 +75,20 @@ class _CatSubCatSelectionState extends State<CatSubCatSelection> {
           if (!isEmptyList)
             TextButton(
               onPressed: () {
-                Navigator.pop(context, selectedSubCategories);
+                if (widget.isFromDashboard) {
+                  context
+                      .read<CategoryProvider>()
+                      .addCategorySubcategory(selectedSubCategories)
+                      .then((value) {
+                    if (value.success) {
+                      if (Navigator.canPop(context)) {
+                        Navigator.pop(context);
+                      }
+                    }
+                  });
+                } else {
+                  Navigator.pop(context, selectedSubCategories);
+                }
               },
               child: Text(
                 "Save",
@@ -88,19 +106,24 @@ class _CatSubCatSelectionState extends State<CatSubCatSelection> {
         dividerColor: Colors.grey,
         selectedTabBackgroundColor: appPrimaryColor.withOpacity(0.1),
         tabs: <Tab>[
-          for (int i = 0; i < list.length; i++) ...[
+          for (int i = 0; i < widget.categoryList.length; i++) ...[
             Tab(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    "${list[i]["categoryName"]}",
-                    style: const TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
+                  Expanded(
+                    child: Text(
+                      widget.categoryList[i].name,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
-                  if (selectedSubCategories[i].isNotEmpty)
+                  if (getSelectedSubList(
+                          categoryList: widget.categoryList[i],
+                          selectedList: selectedSubCategories)
+                      .isNotEmpty)
                     Container(
                       decoration: BoxDecoration(
                         color: appPrimaryColor,
@@ -110,7 +133,7 @@ class _CatSubCatSelectionState extends State<CatSubCatSelection> {
                       height: 18,
                       alignment: Alignment.center,
                       child: Text(
-                        "${selectedSubCategories[i].length}",
+                        "${getSelectedSubList(categoryList: widget.categoryList[i], selectedList: selectedSubCategories).length}",
                         style: const TextStyle(
                           fontSize: 10,
                           color: Colors.white,
@@ -124,23 +147,34 @@ class _CatSubCatSelectionState extends State<CatSubCatSelection> {
           ],
         ],
         contents: <Widget>[
-          for (int i = 0; i < list.length; i++) ...[
+          for (int i = 0; i < widget.categoryList.length; i++) ...[
             SubCategoryView(
-              subCategoryList: list[i]["subCategoryList"],
-              onSelect: (List list) {
+              subCategoryList: widget.categoryList[i].subCategory,
+              onSelect: (List<int> list) {
                 setState(() {
                   isEmptyList = true;
-                  selectedSubCategories[i] = list;
+                  int index = selectedSubCategories.indexWhere(
+                      (element) => element.id == widget.categoryList[i].id);
+                  if (index != -1) {
+                    selectedSubCategories[index].subIdList = list;
+                  } else {
+                    selectedSubCategories.add(CategorySubCategoryModel(
+                        id: widget.categoryList[i].id,
+                        subIdList: list));
+                  }
                 });
                 for (var element in selectedSubCategories) {
-                  if (element.isNotEmpty) {
+                  if (element.subIdList.isNotEmpty) {
                     setState(() {
                       isEmptyList = false;
                     });
                   }
                 }
               },
-              selectedList: selectedSubCategories[i],
+              selectedList: getSelectedSubList(
+                  categoryList: widget.categoryList[i],
+                  selectedList: selectedSubCategories),
+              // selectedList: selectedSubCategories[i].subCategory,
             ),
           ]
         ],
@@ -150,9 +184,9 @@ class _CatSubCatSelectionState extends State<CatSubCatSelection> {
 }
 
 class SubCategoryView extends StatefulWidget {
-  final List subCategoryList;
-  final Function(List) onSelect;
-  final List selectedList;
+  final List<SubCategoryModel> subCategoryList;
+  final Function(List<int>) onSelect;
+  final List<int> selectedList;
 
   const SubCategoryView(
       {Key? key,
@@ -166,7 +200,7 @@ class SubCategoryView extends StatefulWidget {
 }
 
 class _SubCategoryViewState extends State<SubCategoryView> {
-  List selectedList = [];
+  List<int> selectedList = [];
 
   @override
   void initState() {
@@ -180,13 +214,12 @@ class _SubCategoryViewState extends State<SubCategoryView> {
       itemCount: widget.subCategoryList.length,
       itemBuilder: (context, index) {
         return CheckboxListTile(
-          value:
-              selectedList.contains("${widget.subCategoryList[index]["id"]}"),
+          value: selectedList.contains(widget.subCategoryList[index].id),
           activeColor: appPrimaryColor,
           dense: true,
           contentPadding: const EdgeInsets.only(left: 6),
           title: Text(
-            "${widget.subCategoryList[index]["name"]}",
+            widget.subCategoryList[index].name,
             style: TextStyle(
               fontSize: 12,
               color: Colors.grey.shade800,
@@ -198,11 +231,11 @@ class _SubCategoryViewState extends State<SubCategoryView> {
             if (value != null) {
               if (value) {
                 setState(() {
-                  selectedList.add("${widget.subCategoryList[index]["id"]}");
+                  selectedList.add(widget.subCategoryList[index].id);
                 });
               } else {
                 setState(() {
-                  selectedList.remove("${widget.subCategoryList[index]["id"]}");
+                  selectedList.remove(widget.subCategoryList[index].id);
                 });
               }
               widget.onSelect(selectedList);

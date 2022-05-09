@@ -1,9 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:progress_club_link/common/shared_preferences.dart';
 import 'package:progress_club_link/common/text_styles.dart';
-
+import 'package:progress_club_link/helper_functions/SelectedCategoryTOCategorySubCate.dart';
+import 'package:progress_club_link/providers/category_provider.dart';
+import 'package:provider/provider.dart';
 import '../common/PCChapters.dart';
 import '../widgets/my_textform_field.dart';
 import '../widgets/rounded_elevatedbutton.dart';
@@ -21,16 +25,32 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
   TextEditingController txtMobileNumber = TextEditingController();
   TextEditingController txtChapter = TextEditingController();
   TextEditingController txtCompanyName = TextEditingController();
-  List<List> selectedSubCatList = [];
-  List finalSubList = [];
+  List<CategorySubCategoryModel> selectedSubCatList = [];
+  List<int> finalSubList = [];
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
+    super.initState();
     txtName.text = sharedPrefs.memberName;
     txtMobileNumber.text = sharedPrefs.mobileNo;
     txtCompanyName.text = sharedPrefs.companyName;
     txtChapter.text = sharedPrefs.pcGroup;
+    selectedSubCatList =
+        selectedCategoryTOCategorySubCate(sharedPrefs.selected);
+    makeList(selectedSubCatList);
+  }
+
+  makeList(List<CategorySubCategoryModel> list) {
+    List<int> finalList = [];
+    for (var element in list) {
+      for (var sub in element.subIdList) {
+        finalList.add(sub);
+      }
+    }
+    setState(() {
+      finalSubList = finalList;
+    });
   }
 
   @override
@@ -144,28 +164,55 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                   height: 10,
                 ),
                 GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CatSubCatSelection(
-                          selectedList: selectedSubCatList,
-                        ),
-                      ),
-                    ).then((value) {
-                      if (value != null) {
-                        List finalList = [];
-                        for (var element in value) {
-                          for (var sub in element) {
-                            finalList.add(sub);
-                          }
+                  onTap: () async {
+                    await context
+                        .read<CategoryProvider>()
+                        .getCategory()
+                        .then((value) {
+                      if (value.success) {
+                        if (value.data != null) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CatSubCatSelection(
+                                  categoryList: value.data!,
+                                  selectedList: selectedSubCatList,
+                                  isFromDashboard: false,
+                                ),
+                              )).then((value) {
+                            if (value != null) {
+                              List<CategorySubCategoryModel> list =
+                                  value as List<CategorySubCategoryModel>;
+                              setState(() {
+                                selectedSubCatList = list;
+                              });
+                              makeList(list);
+                            }
+                          });
                         }
-                        setState(() {
-                          selectedSubCatList = value;
-                          finalSubList = finalList;
-                        });
                       }
                     });
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => CatSubCatSelection(
+                    //       selectedList: selectedSubCatList,
+                    //     ),
+                    //   ),
+                    // ).then((value) {
+                    //   if (value != null) {
+                    //     List finalList = [];
+                    //     for (var element in value) {
+                    //       for (var sub in element) {
+                    //         finalList.add(sub);
+                    //       }
+                    //     }
+                    //     setState(() {
+                    //       selectedSubCatList = value;
+                    //       finalSubList = finalList;
+                    //     });
+                    //   }
+                    // });
                   },
                   child: AbsorbPointer(
                     child: MyTextFormField(

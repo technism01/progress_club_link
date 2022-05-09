@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:progress_club_link/common/string_constants.dart';
+import 'package:progress_club_link/model/selected_category_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPrefs {
@@ -27,9 +30,12 @@ class SharedPrefs {
   String get email => _sharedPrefs!.getString(StringConstants.email) ?? "";
 
   String get companyName =>
-      _sharedPrefs!.getString(StringConstants.companyName) ?? "";
+      _sharedPrefs?.getString(StringConstants.companyName) ?? "";
 
   String get profile => _sharedPrefs!.getString(StringConstants.profile) ?? "";
+
+  List<SelectedCategoryModel> get selected => SelectedCategoryModel.decode(
+      _sharedPrefs?.getString(StringConstants.selected) ?? "");
 
   //setters
   set memberId(int value) {
@@ -58,6 +64,11 @@ class SharedPrefs {
 
   set companyName(String value) {
     _sharedPrefs!.setString(StringConstants.companyName, value);
+  }
+
+  set selected(List<SelectedCategoryModel> lis) {
+    _sharedPrefs!
+        .setString(StringConstants.selected, SelectedCategoryModel.encode(lis));
   }
 
 /*--------------- Check Is Login or Not --------------------*/

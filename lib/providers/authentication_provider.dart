@@ -6,6 +6,7 @@ import 'package:progress_club_link/common/string_constants.dart';
 import 'package:progress_club_link/model/member_model.dart';
 import 'package:progress_club_link/model/response_model.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:progress_club_link/model/selected_category_model.dart';
 
 Dio dio = Dio();
 
@@ -37,8 +38,10 @@ class AuthenticationProvider extends ChangeNotifier {
       if (response.statusCode == 201) {
         responseClass.success = true;
         responseClass.message = response.data["msg"];
+        List temp=response.data["mySubCategory"];
+        List<SelectedCategoryModel> list=List<SelectedCategoryModel>.from(temp.map((e) => SelectedCategoryModel.fromJson(e)));
         responseClass.data =
-            MemberModel.fromJson(response.data["data"], response.data["token"]);
+            MemberModel.fromJson(response.data["data"], response.data["token"],list);
         isLoading = false;
         notifyListeners();
         return responseClass;
@@ -104,8 +107,11 @@ class AuthenticationProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         responseClass.success = true;
         responseClass.message = response.data["msg"];
+        List temp=response.data["mySubCategory"];
+        List<SelectedCategoryModel> list=List<SelectedCategoryModel>.from(temp.map((e) => SelectedCategoryModel.fromJson(e)));
+
         responseClass.data =
-            MemberModel.fromJson(response.data["data"], response.data["token"]);
+            MemberModel.fromJson(response.data["data"], response.data["token"],list);
         isLoading = false;
         notifyListeners();
         return responseClass;
@@ -158,8 +164,10 @@ class AuthenticationProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         responseClass.success = true;
         responseClass.message = response.data["msg"];
+        List temp=response.data["mySubCategory"];
+        List<SelectedCategoryModel> list=List<SelectedCategoryModel>.from(temp.map((e) => SelectedCategoryModel.fromJson(e)));
         responseClass.data =
-            MemberModel.fromJson(response.data["data"], response.data["token"]);
+            MemberModel.fromJson(response.data["data"], response.data["token"],list);
         isLoading = false;
         notifyListeners();
         Fluttertoast.showToast(msg: responseClass.message);

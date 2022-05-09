@@ -12,10 +12,13 @@ class StringConstants {
   static const String pcGroup = "pcGroup";
   static const String profile = "profile";
   static const String token = "token";
+  static const String selected = "selected";
 
   /*Api Names*/
   static const String signup = "member/signup";
   static const String login = "member/login";
   static const String update = "member/update";
   static const String category = "subCategory/view";
+  static const String categoryAdd = "request/add";
+  static const String request = "request";
 }

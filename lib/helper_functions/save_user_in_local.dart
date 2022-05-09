@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:progress_club_link/common/shared_preferences.dart';
 import 'package:progress_club_link/model/member_model.dart';
@@ -11,4 +12,5 @@ saveUserInLocal(MemberModel user) {
   sharedPrefs.companyName = user.companyName;
   sharedPrefs.email = user.email ?? "";
   sharedPrefs.pcGroup = user.pcGroup;
+  sharedPrefs.selected = user.selected;
 }

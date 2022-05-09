@@ -5,6 +5,7 @@ import 'package:progress_club_link/common/constants.dart';
 import 'package:progress_club_link/common/shared_preferences.dart';
 import 'package:progress_club_link/pages/dashboard.dart';
 import 'package:progress_club_link/providers/authentication_provider.dart';
+import 'package:progress_club_link/providers/category_provider.dart';
 import 'package:provider/provider.dart';
 
 final mySystemTheme = SystemUiOverlayStyle.dark.copyWith(
@@ -24,6 +25,9 @@ void main() async {
       providers: [
         ChangeNotifierProvider(
           create: (context) => AuthenticationProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CategoryProvider(),
         ),
       ],
       child: const MyApp(),

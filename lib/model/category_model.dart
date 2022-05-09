@@ -1,31 +1,31 @@
+class CategoryModel {
+  int id;
+  String name;
+  List<SubCategoryModel> subCategory;
 
+  CategoryModel(
+      {required this.id, required this.name, required this.subCategory});
 
-class Category {
-  int? id;
-  String? name;
-  List<SubCategory>? subCategory;
-
-  Category({this.id, this.name, this.subCategory});
-
-  factory Category.fromJson(Map<String, dynamic> json) {
-    return Category(
+  factory CategoryModel.fromJson(Map<String, dynamic> json) {
+    return CategoryModel(
       id: json['id'],
       name: json['name'],
-      subCategory:json["subCategory"] == null ? null : List<SubCategory>.from(json["subCategory"].map((data) => SubCategory.fromJson(data))),
+      subCategory: List<SubCategoryModel>.from(
+          json["subCategory"].map((data) => SubCategoryModel.fromJson(data))),
     );
   }
 }
 
-class SubCategory {
-  int? id;
-  String? name;
-  int? categoryId;
+class SubCategoryModel {
+  int id;
+  String name;
+  int categoryId;
 
-  SubCategory({this.id, this.name, this.categoryId});
+  SubCategoryModel(
+      {required this.id, required this.name, required this.categoryId});
 
-  SubCategory.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    categoryId = json['categoryId'];
+  factory SubCategoryModel.fromJson(Map<String, dynamic> json) {
+    return SubCategoryModel(
+        id: json['id'], name: json['name'], categoryId: json['categoryId']);
   }
 }

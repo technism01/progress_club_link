@@ -4,7 +4,8 @@ import 'package:flutter/rendering.dart';
 import 'package:progress_club_link/pages/my_leads.dart';
 import 'package:progress_club_link/pages/my_requirements.dart';
 import 'package:progress_club_link/pages/profile_update.dart';
-
+import 'package:progress_club_link/providers/category_provider.dart';
+import 'package:provider/provider.dart';
 import '../common/TabIndicator.dart';
 import '../common/constants.dart';
 import '../common/text_styles.dart';
@@ -90,7 +91,23 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
           ),
           actions: [
             TextButton(
-              onPressed: () {},
+              onPressed: ()async {
+                context.read<CategoryProvider>().getCategory().then((value) {
+                  if (value.success) {
+                    if (value.data != null) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CatSubCatSelection(
+                              categoryList: value.data!,
+                              selectedList: const [],
+                              isFromDashboard: true,
+                            ),
+                          ));
+                    }
+                  }
+                });
+              },
               child: Row(
                 children: const [
                   Icon(

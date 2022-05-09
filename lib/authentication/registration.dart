@@ -12,6 +12,7 @@ import 'package:progress_club_link/component/loading_component.dart';
 import 'package:progress_club_link/helper_functions/save_user_in_local.dart';
 import 'package:progress_club_link/pages/cat_subcat_selection.dart';
 import 'package:progress_club_link/providers/authentication_provider.dart';
+import 'package:progress_club_link/providers/category_provider.dart';
 import 'package:progress_club_link/widgets/my_textform_field.dart';
 import 'package:progress_club_link/widgets/rounded_elevatedbutton.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -33,8 +34,8 @@ class _RegistrationState extends State<Registration> {
   TextEditingController txtCompanyName = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   File? pickedImage;
-  List<List> selectedSubCatList = [];
-  List finalSubList = [];
+  List<CategorySubCategoryModel> selectedSubCatList = [];
+  List<int> finalSubList = [];
 
   Future<File?> _getFromCamera() async {
     XFile? image = await ImagePicker().pickImage(source: ImageSource.camera);
@@ -305,28 +306,61 @@ class _RegistrationState extends State<Registration> {
                   height: 10,
                 ),
                 GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CatSubCatSelection(
-                          selectedList: selectedSubCatList,
-                        ),
-                      ),
-                    ).then((value) {
-                      if (value != null) {
-                        List finalList = [];
-                        for (var element in value) {
-                          for (var sub in element) {
-                            finalList.add(sub);
-                          }
+                  onTap: () async {
+                    await context
+                        .read<CategoryProvider>()
+                        .getCategory()
+                        .then((value) {
+                      if (value.success) {
+                        if (value.data != null) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CatSubCatSelection(
+                                  categoryList: value.data!,
+                                  selectedList: selectedSubCatList,
+                                  isFromDashboard: false,
+                                ),
+                              )).then((value) {
+                            if (value != null) {
+                              List<CategorySubCategoryModel> list =
+                                  value as List<CategorySubCategoryModel>;
+                              List<int> finalList = [];
+                              for (var element in list) {
+                                for (var sub in element.subIdList) {
+                                  finalList.add(sub);
+                                }
+                              }
+                              setState(() {
+                                selectedSubCatList = value;
+                                finalSubList = finalList;
+                              });
+                            }
+                          });
                         }
-                        setState(() {
-                          selectedSubCatList = value;
-                          finalSubList = finalList;
-                        });
                       }
                     });
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => CatSubCatSelection(
+                    //       selectedList: selectedSubCatList,
+                    //     ),
+                    //   ),
+                    // ).then((value) {
+                    //   if (value != null) {
+                    //     List finalList = [];
+                    //     for (var element in value) {
+                    //       for (var sub in element) {
+                    //         finalList.add(sub);
+                    //       }
+                    //     }
+                    //     setState(() {
+                    //       selectedSubCatList = value;
+                    //       finalSubList = finalList;
+                    //     });
+                    //   }
+                    // });
                   },
                   child: AbsorbPointer(
                     child: MyTextFormField(
