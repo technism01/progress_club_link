@@ -18,4 +18,5 @@ class StringConstants {
   static const String login = "member/login";
   static const String update = "member/update";
   static const String category = "subCategory/view";
+  static const String myLeads = "request/myLead?memberId=";
 }

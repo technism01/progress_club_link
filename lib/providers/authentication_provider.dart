@@ -7,6 +7,7 @@ import 'package:progress_club_link/model/member_model.dart';
 import 'package:progress_club_link/model/response_model.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+
 Dio dio = Dio();
 
 class AuthenticationProvider extends ChangeNotifier {
@@ -137,7 +138,7 @@ class AuthenticationProvider extends ChangeNotifier {
   }
 
   /*update user*/
-  Future<ResponseClass<MemberModel>> updateUser(
+  Future<ResponseClass<MemberModel>> updateUserProfile(
       {required FormData formData}) async {
     String _url = StringConstants.apiUrl + StringConstants.update;
 

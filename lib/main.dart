@@ -5,6 +5,7 @@ import 'package:progress_club_link/common/constants.dart';
 import 'package:progress_club_link/common/shared_preferences.dart';
 import 'package:progress_club_link/pages/dashboard.dart';
 import 'package:progress_club_link/providers/authentication_provider.dart';
+import 'package:progress_club_link/providers/lead_reuquirement_provider.dart';
 import 'package:provider/provider.dart';
 
 final mySystemTheme = SystemUiOverlayStyle.dark.copyWith(
@@ -25,6 +26,7 @@ void main() async {
         ChangeNotifierProvider(
           create: (context) => AuthenticationProvider(),
         ),
+        ChangeNotifierProvider(create: (context) => LeadRequirementProvider())
       ],
       child: const MyApp(),
     ),
