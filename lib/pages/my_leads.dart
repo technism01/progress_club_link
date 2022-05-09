@@ -1,13 +1,20 @@
 import 'dart:io';
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_club_link/common/constants.dart';
+import 'package:progress_club_link/common/shared_preferences.dart';
+import 'package:progress_club_link/model/mylead_model.dart';
+import 'package:progress_club_link/providers/lead_reuquirement_provider.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../common/text_styles.dart';
 import '../component/myLeadList.dart';
 import '../component/myRequirementList.dart';
+import 'package:provider/provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
 
 class MyLead extends StatefulWidget {
   const MyLead({Key? key}) : super(key: key);
@@ -18,10 +25,13 @@ class MyLead extends StatefulWidget {
 
 class _MyLeadState extends State<MyLead> with TickerProviderStateMixin {
   late TabController _tabController;
+  List<Category> myLeadList=[];
 
   @override
   void initState() {
     super.initState();
+    WidgetsFlutterBinding.ensureInitialized();
+    Future.delayed(const Duration(seconds: 0)).then((value) => myLeads());
     _tabController = TabController(
       initialIndex: 0,
       vsync: this,
@@ -68,6 +78,27 @@ class _MyLeadState extends State<MyLead> with TickerProviderStateMixin {
       "bname": "Semicolon Infotech",
     },
   ];
+
+  myLeads() async {
+    context.read<LeadRequirementProvider>()
+        .getMyLeads(memberID:sharedPrefs.memberId)
+        .then((value) {
+      if (value.success == true) {
+        if (value.data == null) {
+          Fluttertoast.showToast(
+              msg: "Could not get Lead");
+        } else {
+          setState(() {
+            myLeadList=value.data!;
+          });
+          if (kDebugMode) {
+            print(myLeadList.length);
+          }
+        }
+      }
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {

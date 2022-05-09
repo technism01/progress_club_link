@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-
+import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -158,6 +158,7 @@ class _RegistrationState extends State<Registration> {
   }
 
   registerUser() async {
+
     FormData data = FormData.fromMap({
       "name": txtName.text,
       "mobileNumber": txtMobileNumber.text,
@@ -166,11 +167,12 @@ class _RegistrationState extends State<Registration> {
       "subCategoryIds": json.encode(finalSubList),
     });
 
-    if (pickedImage != null) {
-      data.files.add(
-          MapEntry("profile", await MultipartFile.fromFile(pickedImage!.path)));
-    }
-    log("${data.fields}");
+    final bytes = await pickedImage!.readAsBytes();
+    final MultipartFile file = MultipartFile.fromBytes(bytes, filename: "profilePhoto");
+    MapEntry<String, MultipartFile> imageFiles = MapEntry("profile", file);
+
+    data.files.add(imageFiles);
+
     context
         .read<AuthenticationProvider>()
         .registerUser(data: data)
@@ -398,8 +400,8 @@ class _RegistrationState extends State<Registration> {
                     _imagePick();
                   },
                   child: pickedImage != null
-                      ? Image.file(
-                          pickedImage!,
+                      ? Image.network(
+                          pickedImage!.path,
                           height: 80,
                           width: 80,
                         )

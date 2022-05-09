@@ -21,4 +21,5 @@ class StringConstants {
   static const String category = "subCategory/view";
   static const String categoryAdd = "request/add";
   static const String request = "request";
+  static const String myLeads = "request/myLead?memberId=";
 }
