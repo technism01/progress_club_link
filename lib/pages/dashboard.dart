@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:progress_club_link/authentication/login.dart';
+import 'package:progress_club_link/common/shared_preferences.dart';
 import 'package:progress_club_link/pages/my_leads.dart';
 import 'package:progress_club_link/pages/my_requirements.dart';
 import 'package:progress_club_link/pages/profile_update.dart';
@@ -32,6 +34,57 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
       initialIndex: 0,
       vsync: this,
       length: 2,
+    );
+  }
+
+  showLogoutDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Confirm Logout"),
+          content: Text(
+            "Are you sure you want to logout?",
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.grey.shade800,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                "No",
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey.shade600,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                SharedPrefs().logout().then((value) {
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Login()),
+                      (route) => false);
+                });
+              },
+              child: Text(
+                "Yes",
+                style: TextStyle(
+                  fontSize: 14,
+                  color: appPrimaryColor,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -75,7 +128,10 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
               ListTile(
                 leading: const Icon(Icons.login_rounded),
                 title: const Text('Logout'),
-                onTap: () {},
+                onTap: () {
+                  Navigator.pop(context);
+                  showLogoutDialog();
+                },
               ),
             ],
           ),
@@ -91,7 +147,7 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
           ),
           actions: [
             TextButton(
-              onPressed: ()async {
+              onPressed: () async {
                 context.read<CategoryProvider>().getCategory().then((value) {
                   if (value.success) {
                     if (value.data != null) {

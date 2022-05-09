@@ -11,6 +11,7 @@ import 'package:progress_club_link/common/text_styles.dart';
 import 'package:progress_club_link/component/loading_component.dart';
 import 'package:progress_club_link/helper_functions/save_user_in_local.dart';
 import 'package:progress_club_link/pages/cat_subcat_selection.dart';
+import 'package:progress_club_link/pages/dashboard.dart';
 import 'package:progress_club_link/providers/authentication_provider.dart';
 import 'package:progress_club_link/providers/category_provider.dart';
 import 'package:progress_club_link/widgets/my_textform_field.dart';
@@ -198,8 +199,14 @@ class _RegistrationState extends State<Registration> {
           Fluttertoast.showToast(
               msg: "Could not register, please try after sometime");
         } else {
-          Fluttertoast.showToast(msg: "Registration successfully completed");
+          Fluttertoast.showToast(msg: "You register successfully");
           saveUserInLocal(value.data!);
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const Dashboard(),
+              ),
+              (route) => false);
         }
       }
     });
@@ -456,6 +463,34 @@ class _RegistrationState extends State<Registration> {
                           }
                         },
                       ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: RichText(
+                      text: TextSpan(children: [
+                        TextSpan(
+                          text: "Already registered? ",
+                          style: TextStyle(
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
+                        TextSpan(
+                          text: "Login",
+                          style: TextStyle(
+                            color: appPrimaryColor,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ]),
+                    ),
+                  ),
+                ),
                 const SizedBox(
                   height: 25,
                 ),

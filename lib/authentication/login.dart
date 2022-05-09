@@ -117,9 +117,21 @@ class _LoginState extends State<Login> {
                               builder: (context) => const Registration()));
                     },
                     child: RichText(
-                      text: const TextSpan(
-                        text: "Not registered?",
-                      ),
+                      text: TextSpan(children: [
+                        TextSpan(
+                          text: "New user? ",
+                          style: TextStyle(
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
+                        TextSpan(
+                          text: "Register Here",
+                          style: TextStyle(
+                            color: appPrimaryColor,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ]),
                     ),
                   ),
                 ],
