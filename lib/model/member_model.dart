@@ -8,7 +8,7 @@ class MemberModel {
   String companyName;
   String? email;
   String? profile;
-  String token;
+  String? token;
   List<SelectedCategoryModel> selected;
 
   MemberModel(
@@ -19,17 +19,17 @@ class MemberModel {
       required this.companyName,
       required this.pcGroup,
       this.profile,
-      required this.token,required this.selected});
+      this.token,
+      required this.selected});
 
-  factory MemberModel.fromJson(Map<String, dynamic> json, String token,List<SelectedCategoryModel> list) =>
+  factory MemberModel.fromJson(
+          Map<String, dynamic> json, List<SelectedCategoryModel> list) =>
       MemberModel(
-        memberId: json["id"],
-        memberName: json["name"],
-        mobileNumber: json["mobileNumber"],
-        email: json["email"],
-        pcGroup: json["pcGroup"],
-        companyName: json["companyName"],
-        token: token,
-        selected: list
-      );
+          memberId: json["id"],
+          memberName: json["name"],
+          mobileNumber: json["mobileNumber"],
+          email: json["email"],
+          pcGroup: json["pcGroup"],
+          companyName: json["companyName"],
+          selected: list);
 }

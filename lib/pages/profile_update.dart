@@ -1,8 +1,6 @@
-import 'dart:developer';
-
 import 'dart:convert';
-import 'dart:developer';
-import 'dart:io';
+import 'dart:html';
+import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,8 +20,6 @@ import '../widgets/my_textform_field.dart';
 import '../widgets/rounded_elevatedbutton.dart';
 import 'cat_subcat_selection.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:provider/provider.dart';
-
 
 class ProfileUpdate extends StatefulWidget {
   const ProfileUpdate({Key? key}) : super(key: key);
@@ -45,26 +41,27 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
 
   updateProfile() async {
     FormData data = FormData.fromMap({
-      "id":sharedPrefs.memberId,
+      "id": sharedPrefs.memberId,
       "name": txtName.text,
-      //"mobileNumber": txtMobileNumber.text,
+      // "mobileNumber": txtMobileNumber.text,
       "companyName": txtCompanyName.text,
       "pcGroup": txtChapter.text,
-      "subCategoryIds": json.encode([5,6])//json.encode(finalSubList),
+      "subCategoryIds": json.encode(finalSubList) //json.encode(finalSubList),
     });
-    final bytes = await pickedImage!.readAsBytes();
-    final MultipartFile file = MultipartFile.fromBytes(bytes, filename: "profilePhoto");
-    MapEntry<String, MultipartFile> imageFiles = MapEntry("profile", file);
+    if (file1 != null) {
+      final MultipartFile file = MultipartFile.fromBytes(file1!);
+      data.files.add(MapEntry("profile", file));
+    }
 
-    data.files.add(imageFiles);
+    print(data.files);
 
-    context.read<AuthenticationProvider>()
-        .updateUserProfile(formData:data)
+    await context
+        .read<AuthenticationProvider>()
+        .updateUserProfile(formData: data)
         .then((value) {
       if (value.success == true) {
         if (value.data == null) {
-          Fluttertoast.showToast(
-              msg: "Could not Update");
+          Fluttertoast.showToast(msg: "Could not Update");
         } else {
           Fluttertoast.showToast(msg: "Profile Update Successfully!");
           saveUserInLocal(value.data!);
@@ -72,7 +69,6 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
       }
     });
   }
-
 
   @override
   void initState() {
@@ -102,7 +98,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
   Future<File?> _getFromCamera() async {
     XFile? image = await ImagePicker().pickImage(source: ImageSource.camera);
     if (image != null) {
-      return File(image.path);
+      return File(await image.readAsBytes(), image.name);
     }
     return null;
   }
@@ -110,9 +106,25 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
   Future<File?> _getFromGallery() async {
     XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (image != null) {
-      return File(image.path);
+      return File(await image.readAsBytes(), image.name);
     }
     return null;
+  }
+
+  Uint8List? file1;
+
+  uploadImage() async {
+    // WEB
+    final ImagePicker _picker = ImagePicker();
+    XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      var f = await image.readAsBytes();
+      setState(() {
+        file1 = f;
+      });
+    } else {
+      Fluttertoast.showToast(msg: "Failed to pick image");
+    }
   }
 
   void _imagePick() {
@@ -219,8 +231,6 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
     );
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -248,14 +258,14 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
               children: [
                 InkWell(
                     onTap: () {
-                      _imagePick();
+                      // _imagePick();
+                      uploadImage();
                     },
                     child: profileImage == ""
-                        ? pickedImage != null
+                        ? file1 != null
                             ? CircleAvatar(
                                 radius: 60,
-                                backgroundImage:
-                                    NetworkImage(pickedImage!.path))
+                                backgroundImage: MemoryImage(file1!))
                             : const CircleAvatar(
                                 radius: 60,
                                 backgroundImage: AssetImage("images/user.png"))
@@ -343,7 +353,6 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                 const SizedBox(
                   height: 10,
                 ),
-
                 GestureDetector(
                   onTap: () async {
                     await context
@@ -412,26 +421,25 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                     ),
                   ),
                 ),
-
                 const SizedBox(
                   height: 20,
                 ),
                 context.watch<AuthenticationProvider>().isLoading
                     ? const LoadingComponent()
                     : RoundedElevatedButton(
-                  label: const Text(
-                    "Update",
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      updateProfile();
-                    }
-                  },
-                ),
+                        label: const Text(
+                          "Update",
+                          style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600),
+                        ),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            updateProfile();
+                          }
+                        },
+                      ),
               ],
             ),
           ),

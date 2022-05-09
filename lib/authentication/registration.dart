@@ -157,8 +157,23 @@ class _RegistrationState extends State<Registration> {
     );
   }
 
-  registerUser() async {
+  Uint8List? file1;
 
+  uploadImage() async {
+    // WEB
+    final ImagePicker _picker = ImagePicker();
+    XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      var f = await image.readAsBytes();
+      setState(() {
+        file1 = f;
+      });
+    } else {
+      Fluttertoast.showToast(msg: "Failed to pick image");
+    }
+  }
+
+  registerUser() async {
     FormData data = FormData.fromMap({
       "name": txtName.text,
       "mobileNumber": txtMobileNumber.text,
@@ -167,11 +182,12 @@ class _RegistrationState extends State<Registration> {
       "subCategoryIds": json.encode(finalSubList),
     });
 
-    final bytes = await pickedImage!.readAsBytes();
-    final MultipartFile file = MultipartFile.fromBytes(bytes, filename: "profilePhoto");
-    MapEntry<String, MultipartFile> imageFiles = MapEntry("profile", file);
-
-    data.files.add(imageFiles);
+    if (file1 != null) {
+      final MultipartFile file =
+          MultipartFile.fromBytes(file1!, filename: "profilePhoto");
+      MapEntry<String, MultipartFile> imageFiles = MapEntry("profile", file);
+      data.files.add(imageFiles);
+    }
 
     context
         .read<AuthenticationProvider>()
@@ -397,11 +413,12 @@ class _RegistrationState extends State<Registration> {
                 ),
                 InkWell(
                   onTap: () {
-                    _imagePick();
+                    // _imagePick();
+                    uploadImage();
                   },
-                  child: pickedImage != null
-                      ? Image.network(
-                          pickedImage!.path,
+                  child: file1 != null
+                      ? Image.memory(
+                          file1!,
                           height: 80,
                           width: 80,
                         )
