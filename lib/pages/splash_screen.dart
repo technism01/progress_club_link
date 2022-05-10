@@ -36,21 +36,23 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(
-            "assets/images/tagline.png",
-            width: 500,
-          ),
-          const SizedBox(
-            height: 35,
-          ),
-          Image.asset(
-            "assets/images/pc_logo.png",
-            height: 120,
-          ),
-        ],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              "assets/images/tagline.png",
+              width: 500,
+            ),
+            const SizedBox(
+              height: 35,
+            ),
+            Image.asset(
+              "assets/images/pc_logo.png",
+              height: 120,
+            ),
+          ],
+        ),
       ),
     );
   }
