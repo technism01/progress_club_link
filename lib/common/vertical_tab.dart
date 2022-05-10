@@ -48,7 +48,6 @@ class _VerticalTabsState extends State<VerticalTabs>
   int _selectedIndex = 0;
   bool? _changePageByTapView;
 
-  AnimationController? animationController;
   Animation<double>? animation;
   Animation<RelativeRect>? rectAnimation;
 
@@ -60,6 +59,7 @@ class _VerticalTabsState extends State<VerticalTabs>
 
   @override
   void initState() {
+    super.initState();
     for (int i = 0; i < widget.tabs.length; i++) {
       animationControllers.add(AnimationController(
         duration: const Duration(milliseconds: 400),
@@ -71,8 +71,14 @@ class _VerticalTabsState extends State<VerticalTabs>
     if (widget.disabledChangePageFromContentView == true) {
       pageScrollPhysics = const NeverScrollableScrollPhysics();
     }
+  }
 
-    super.initState();
+  @override
+  void dispose() {
+    super.dispose();
+    for (var element in animationControllers) {
+      element.dispose();
+    }
   }
 
   @override

@@ -13,7 +13,7 @@ import 'package:progress_club_link/model/selected_category_model.dart';
 Dio dio = Dio();
 
 class CategoryProvider extends ChangeNotifier {
-  bool isLoading = false;
+  bool isLoading = true;
 
   /*Get Category SubCategory*/
   Future<ResponseClass<List<CategoryModel>>> getCategory() async {

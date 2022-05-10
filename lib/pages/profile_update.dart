@@ -161,6 +161,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                         : profileImage == ""
                             ? const CircleAvatar(
                                 radius: 60,
+                                backgroundColor: Colors.grey,
                                 backgroundImage: AssetImage("images/user.png"))
                             : CircleAvatar(
                                 radius: 60,
@@ -258,6 +259,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => CatSubCatSelection(
+                                  title: "Select Your Category",
                                   categoryList: value.data!,
                                   selectedList: selectedSubCatList,
                                   isFromDashboard: false,

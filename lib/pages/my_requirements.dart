@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/cupertino.dart';
@@ -37,6 +38,7 @@ class _MyRequirementState extends State<MyRequirement>
   }
 
   getMyNeeds() async {
+    log("call -->");
     context
         .read<LeadRequirementProvider>()
         .getMyNeeds(memberID: sharedPrefs.memberId)
@@ -49,7 +51,6 @@ class _MyRequirementState extends State<MyRequirement>
             _tabController =
                 TabController(length: myNeedList.length, vsync: this);
           });
-
           print(myNeedList.length);
         }
       }
@@ -67,6 +68,7 @@ class _MyRequirementState extends State<MyRequirement>
                 ? Padding(
                     padding: const EdgeInsets.only(left: 5.0, right: 5),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(
                           height: 10,
@@ -121,7 +123,7 @@ class _MyRequirementState extends State<MyRequirement>
                     ),
                   )
                 : const EmptyScreen(
-                    title: "No Leads Found", image: "assets/images/user.png"),
+                    title: "No Need Added", image: "assets/images/user.png"),
       ),
     );
   }

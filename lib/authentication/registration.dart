@@ -120,19 +120,6 @@ class _RegistrationState extends State<Registration> {
                   ),
                 ),
                 const SizedBox(
-                  height: 15,
-                ),
-                Center(
-                  child: Text(
-                    "मेरा बिज़नेस तो क्लब में ही",
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: appPrimaryColor,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-                const SizedBox(
                   height: 35,
                 ),
                 MyTextFormField(
@@ -227,6 +214,7 @@ class _RegistrationState extends State<Registration> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => CatSubCatSelection(
+                                  title: "Select Your Category",
                                   categoryList: value.data!,
                                   selectedList: selectedSubCatList,
                                   isFromDashboard: false,
