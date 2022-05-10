@@ -3,8 +3,10 @@ class StringConstants {
   // static const String apiUrl = "http://192.168.1.50:8000/api/";
   // static const String imageUrl = "http://192.168.1.50:8000/public/";
 
-  static const String apiUrl = "http://34.232.140.87:8000/api/";
-  static const String imageUrl = "http://34.232.140.87:8000/public/";
+  // static const String apiUrl = "http://34.232.140.87:8000/api/";
+  static const String apiUrl = "https://logispire.in/api/";
+  // static const String imageUrl = "http://34.232.140.87:8000/public/";
+  static const String imageUrl = "https://logispire.in/public/";
 
   static const String errorMessage = "Something went wrong";
 
