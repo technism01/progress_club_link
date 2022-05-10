@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:progress_club_link/model/selected_category_model.dart';
 import 'package:progress_club_link/providers/category_provider.dart';
 

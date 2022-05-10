@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:progress_club_link/authentication/registration.dart';
@@ -11,7 +9,7 @@ import 'package:progress_club_link/providers/authentication_provider.dart';
 import 'package:progress_club_link/widgets/my_textform_field.dart';
 import 'package:progress_club_link/widgets/rounded_elevatedbutton.dart';
 import 'package:provider/provider.dart';
-
+import 'package:page_transition/page_transition.dart';
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
@@ -33,8 +31,7 @@ class _LoginState extends State<Login> {
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
-            builder: (context) => const Dashboard(),
+          PageTransition(type: PageTransitionType.rightToLeft, child: const Dashboard(),
           ),
         );
       }
@@ -113,8 +110,7 @@ class _LoginState extends State<Login> {
                     onPressed: () {
                       Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => const Registration()));
+                          PageTransition(type: PageTransitionType.rightToLeft, child: const Registration()));
                     },
                     child: RichText(
                       text: TextSpan(children: [

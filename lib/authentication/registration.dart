@@ -2,13 +2,16 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:html';
 import 'dart:typed_data';
+import 'package:page_transition/page_transition.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:progress_club_link/common/PCChapters.dart';
 import 'package:progress_club_link/common/constants.dart';
-import 'package:progress_club_link/common/text_styles.dart';
 import 'package:progress_club_link/component/loading_component.dart';
 import 'package:progress_club_link/helper_functions/save_user_in_local.dart';
 import 'package:progress_club_link/pages/cat_subcat_selection.dart';
@@ -17,10 +20,7 @@ import 'package:progress_club_link/providers/authentication_provider.dart';
 import 'package:progress_club_link/providers/category_provider.dart';
 import 'package:progress_club_link/widgets/my_textform_field.dart';
 import 'package:progress_club_link/widgets/rounded_elevatedbutton.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:dio/dio.dart';
-import 'package:image_picker/image_picker.dart';
 
 class Registration extends StatefulWidget {
   const Registration({Key? key}) : super(key: key);
@@ -53,7 +53,9 @@ class _RegistrationState extends State<Registration> {
         file1 = f;
       });
     } else {
-      Fluttertoast.showToast(msg: "Failed to pick image");
+      Fluttertoast.showToast(
+          msg: "Failed to pick image",
+          webBgColor: "linear-gradient(to right, #5A5A5A, #5A5A5A)");
     }
   }
 
@@ -75,6 +77,7 @@ class _RegistrationState extends State<Registration> {
           contentType: MediaType("image", "${pickedImage!.type}"));
       data.files.add(MapEntry("profile", file));
     }
+
     context
         .read<AuthenticationProvider>()
         .registerUser(data: data)
@@ -82,14 +85,18 @@ class _RegistrationState extends State<Registration> {
       if (value.success == true) {
         if (value.data == null) {
           Fluttertoast.showToast(
-              msg: "Could not register, please try after sometime");
+              msg: "Could not register, please try after sometime",
+              webBgColor: "linear-gradient(to right, #5A5A5A, #5A5A5A)");
         } else {
-          Fluttertoast.showToast(msg: "You register successfully");
+          Fluttertoast.showToast(
+              msg: "You register successfully",
+              webBgColor: "linear-gradient(to right, #5A5A5A, #5A5A5A)");
           saveUserInLocal(value.data!);
           Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(
-                builder: (context) => const Dashboard(),
+              PageTransition(
+                type: PageTransitionType.rightToLeft,
+                child: const Dashboard(),
               ),
               (route) => false);
         }
@@ -212,14 +219,14 @@ class _RegistrationState extends State<Registration> {
                         if (value.data != null) {
                           Navigator.push(
                               context,
-                              MaterialPageRoute(
-                                builder: (context) => CatSubCatSelection(
-                                  title: "Select Your Category",
-                                  categoryList: value.data!,
-                                  selectedList: selectedSubCatList,
-                                  isFromDashboard: false,
-                                ),
-                              )).then((value) {
+                              PageTransition(
+                                  type: PageTransitionType.fade,
+                                  child: CatSubCatSelection(
+                                    title: "Select Your Category",
+                                    categoryList: value.data!,
+                                    selectedList: selectedSubCatList,
+                                    isFromDashboard: false,
+                                  ))).then((value) {
                             if (value != null) {
                               List<CategorySubCategoryModel> list =
                                   value as List<CategorySubCategoryModel>;
@@ -298,16 +305,14 @@ class _RegistrationState extends State<Registration> {
                   },
                   child: file1 != null
                       ? ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
-
-                        child: Image.memory(
+                          borderRadius: BorderRadius.circular(5),
+                          child: Image.memory(
                             file1!,
                             height: 60,
                             width: 60,
-                    fit: BoxFit.cover,
-
+                            fit: BoxFit.cover,
                           ),
-                      )
+                        )
                       : Container(
                           decoration: BoxDecoration(
                             color: Colors.grey.shade300,

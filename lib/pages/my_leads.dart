@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -6,16 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:progress_club_link/common/constants.dart';
 import 'package:progress_club_link/common/shared_preferences.dart';
 import 'package:progress_club_link/providers/lead_reuquirement_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
-import 'package:url_launcher/url_launcher.dart';
+
 import '../common/EmptyScreen.dart';
 import '../common/text_styles.dart';
 import '../component/loading_component.dart';
 import '../component/myLeadList.dart';
-import '../component/myRequirementList.dart';
-import 'package:provider/provider.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-
 import '../model/mylead_model.dart';
 
 class MyLead extends StatefulWidget {
@@ -41,7 +37,7 @@ class _MyLeadState extends State<MyLead> with TickerProviderStateMixin {
   getMyLeads() async {
     context
         .read<LeadRequirementProvider>()
-        .getMyLeads(memberID: sharedPrefs.memberId)
+        .getMyLeads(memberID:sharedPrefs.memberId)
         .then((value) {
       if (value.success == true) {
         if (value.data == null) {
@@ -124,7 +120,7 @@ class _MyLeadState extends State<MyLead> with TickerProviderStateMixin {
                     ),
                   )
                 : const EmptyScreen(
-                    title: "No Leads Found", image: "assets/images/user.png"),
+                    title: "No Leads Found", image: "assets/images/nosearchfound.png"),
       ),
     );
   }
