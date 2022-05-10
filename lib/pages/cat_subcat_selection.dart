@@ -9,9 +9,10 @@ import 'package:progress_club_link/model/category_model.dart';
 import 'package:progress_club_link/providers/category_provider.dart';
 import 'package:progress_club_link/widgets/my_textform_field.dart';
 import 'package:provider/provider.dart';
-
 import '../common/EmptyScreen.dart';
 import '../common/text_styles.dart';
+import 'dashboard.dart';
+import 'package:page_transition/page_transition.dart';
 
 class CatSubCatSelection extends StatefulWidget {
   final List<CategoryModel> categoryList;
@@ -97,9 +98,7 @@ class _CatSubCatSelectionState extends State<CatSubCatSelection> {
                       .addCategorySubcategory(selectedSubCategories)
                       .then((value) {
                     if (value.success) {
-                      if (Navigator.canPop(context)) {
-                        Navigator.pop(context);
-                      }
+                      Navigator.pushReplacement(context, PageTransition(type: PageTransitionType.fade, child: const Dashboard(initialIndex: 1,)));
                     }
                   });
                 } else {
@@ -275,8 +274,8 @@ class _SubCategoryViewState extends State<SubCategoryView> {
                                   });
                                 } else {
                                   setState(() {
-                                    selectedList.remove(
-                                        searchedCategoryList[index].id);
+                                    selectedList
+                                        .remove(searchedCategoryList[index].id);
                                   });
                                 }
                                 widget.onSelect(selectedList);
@@ -336,7 +335,7 @@ class _SubCategoryViewState extends State<SubCategoryView> {
       return;
     }
     for (var subcategory in widget.subCategoryList) {
-      if (subcategory.name.contains(text)) {
+      if (subcategory.name.toLowerCase().contains(text.toLowerCase())) {
         searchedCategoryList.add(subcategory);
       }
     }

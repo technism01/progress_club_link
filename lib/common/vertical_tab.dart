@@ -75,10 +75,10 @@ class _VerticalTabsState extends State<VerticalTabs>
 
   @override
   void dispose() {
-    super.dispose();
     for (var element in animationControllers) {
       element.dispose();
     }
+    super.dispose();
   }
 
   @override

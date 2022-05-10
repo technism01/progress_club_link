@@ -175,8 +175,6 @@ class AuthenticationProvider extends ChangeNotifier {
         responseClass.data = MemberModel.fromJson(response.data["data"], list);
         isLoading = false;
         notifyListeners();
-        Fluttertoast.showToast(msg: responseClass.message,webBgColor:
-        "linear-gradient(to right, #5A5A5A, #5A5A5A)");
         return responseClass;
       }
       if (response.statusCode == 400) {

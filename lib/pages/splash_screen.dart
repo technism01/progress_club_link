@@ -17,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Future.delayed(const Duration(seconds: 2), () {
       if (sharedPrefs.memberId != 0) {
-        Navigator.pushReplacement(context, PageTransition(type: PageTransitionType.fade, child: const Dashboard()));
+        Navigator.pushReplacement(context, PageTransition(type: PageTransitionType.fade, child: const Dashboard(initialIndex: 0,)));
       } else {
         Navigator.pushReplacement(context, PageTransition(type: PageTransitionType.fade, child: const Login()));
       }

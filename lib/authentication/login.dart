@@ -31,7 +31,7 @@ class _LoginState extends State<Login> {
 
         Navigator.pushReplacement(
           context,
-          PageTransition(type: PageTransitionType.rightToLeft, child: const Dashboard(),
+          PageTransition(type: PageTransitionType.rightToLeft, child: const Dashboard(initialIndex: 0),
           ),
         );
       }

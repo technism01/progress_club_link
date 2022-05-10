@@ -45,6 +45,20 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
   File? pickedImage;
   String profileImage = "";
 
+  @override
+  void initState() {
+    super.initState();
+    txtName.text = sharedPrefs.memberName;
+    txtMobileNumber.text = sharedPrefs.mobileNo;
+    txtCompanyName.text = sharedPrefs.companyName;
+    txtChapter.text = sharedPrefs.pcGroup;
+    profileImage = sharedPrefs.profile;
+    selectedSubCatList =
+        selectedCategoryTOCategorySubCate(sharedPrefs.selected);
+    makeList(selectedSubCatList);
+    setState(() {});
+  }
+
   updateProfile() async {
     FormData data = FormData.fromMap({
       "id": sharedPrefs.memberId,
@@ -79,26 +93,12 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
               webBgColor: "linear-gradient(to right, #5A5A5A, #5A5A5A)");
           saveUserInLocal(value.data!);
           Navigator.of(context).pushAndRemoveUntil(
-            PageTransition(type: PageTransitionType.leftToRight, child: const Dashboard()),
+            PageTransition(type: PageTransitionType.leftToRight, child: const Dashboard(initialIndex: 0,)),
             (route) => false,
           );
         }
       }
     });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    txtName.text = sharedPrefs.memberName;
-    txtMobileNumber.text = sharedPrefs.mobileNo;
-    txtCompanyName.text = sharedPrefs.companyName;
-    txtChapter.text = sharedPrefs.pcGroup;
-    profileImage = sharedPrefs.profile;
-    selectedSubCatList =
-        selectedCategoryTOCategorySubCate(sharedPrefs.selected);
-    makeList(selectedSubCatList);
-    setState(() {});
   }
 
   makeList(List<CategorySubCategoryModel> list) {
@@ -117,7 +117,6 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
 
   uploadImage() async {
     // WEB
-
     final ImagePicker _picker = ImagePicker();
     XFile? image = await _picker.pickImage(
       source: ImageSource.gallery,

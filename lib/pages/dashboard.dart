@@ -16,7 +16,9 @@ import 'cat_subcat_selection.dart';
 import 'package:page_transition/page_transition.dart';
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({Key? key}) : super(key: key);
+  final int initialIndex;
+
+  const Dashboard({Key? key, required this.initialIndex}) : super(key: key);
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -31,7 +33,7 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     tabController = TabController(
-      initialIndex: 0,
+      initialIndex: widget.initialIndex,
       vsync: this,
       length: 2,
     );
@@ -162,14 +164,14 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                                 selectedList: const [],
                                 isFromDashboard: true,
                               ))).then((value) {
-                        setState(() {});
+                        //todo call api here
                       });
                     }
                   }
                 });
               },
               child: context.watch<CategoryProvider>().isLoading
-                  ? Center(
+                  ? const Center(
                       child: CircularProgressIndicator(),
                     )
                   : Row(
@@ -193,37 +195,24 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
               },
               icon: const Icon(Icons.menu_rounded)),
         ),
-        body: NotificationListener<UserScrollNotification>(
-          onNotification: (notification) {
-            final ScrollDirection direction = notification.direction;
-            setState(() {
-              if (direction == ScrollDirection.reverse) {
-                showFab = false;
-              } else if (direction == ScrollDirection.forward) {
-                showFab = true;
-              }
-            });
-            return true;
-          },
-          child: Column(
-            children: [
-              TabBar(
-                  unselectedLabelStyle: MyTextStyles.semiBold,
-                  unselectedLabelColor: Colors.grey,
-                  labelColor: appPrimaryColor,
-                  labelStyle: MyTextStyles.semiBold,
-                  indicatorSize: TabBarIndicatorSize.label,
-                  indicatorColor: appPrimaryColor,
-                  indicator:
-                      CustomTabIndicator(color: appPrimaryColor, height: 3),
-                  controller: tabController,
-                  tabs: const [Tab(text: "My Leads"), Tab(text: "My Needs")]),
-              Expanded(
-                  child: TabBarView(
-                      controller: tabController,
-                      children: const [MyLead(), MyRequirement()]))
-            ],
-          ),
+        body: Column(
+          children: [
+            TabBar(
+                unselectedLabelStyle: MyTextStyles.semiBold,
+                unselectedLabelColor: Colors.grey,
+                labelColor: appPrimaryColor,
+                labelStyle: MyTextStyles.semiBold,
+                indicatorSize: TabBarIndicatorSize.label,
+                indicatorColor: appPrimaryColor,
+                indicator:
+                    CustomTabIndicator(color: appPrimaryColor, height: 3),
+                controller: tabController,
+                tabs: const [Tab(text: "My Leads"), Tab(text: "My Needs")]),
+            Expanded(
+                child: TabBarView(
+                    controller: tabController,
+                    children: const [MyLead(), MyRequirement()]))
+          ],
         ),
       ),
     );

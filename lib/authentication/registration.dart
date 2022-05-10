@@ -96,7 +96,7 @@ class _RegistrationState extends State<Registration> {
               context,
               PageTransition(
                 type: PageTransitionType.rightToLeft,
-                child: const Dashboard(),
+                child: const Dashboard(initialIndex: 0,),
               ),
               (route) => false);
         }
