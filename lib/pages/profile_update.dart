@@ -15,9 +15,10 @@ import 'package:progress_club_link/common/shared_preferences.dart';
 import 'package:progress_club_link/common/string_constants.dart';
 import 'package:progress_club_link/common/text_styles.dart';
 import 'package:progress_club_link/helper_functions/SelectedCategoryTOCategorySubCate.dart';
+import 'package:progress_club_link/pages/dashboard.dart';
 import 'package:progress_club_link/providers/category_provider.dart';
 import 'package:provider/provider.dart';
-
+import 'package:page_transition/page_transition.dart';
 import '../common/PCChapters.dart';
 import '../component/loading_component.dart';
 import '../helper_functions/save_user_in_local.dart';
@@ -77,8 +78,10 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
               msg: "Profile Update Successfully!",
               webBgColor: "linear-gradient(to right, #5A5A5A, #5A5A5A)");
           saveUserInLocal(value.data!);
-          Navigator.of(context).pop();
-          
+          Navigator.of(context).pushAndRemoveUntil(
+            PageTransition(type: PageTransitionType.leftToRight, child: const Dashboard()),
+            (route) => false,
+          );
         }
       }
     });
@@ -265,12 +268,14 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                         if (value.data != null) {
                           Navigator.push(
                               context,
-                              PageTransition(type: PageTransitionType.fade, child: CatSubCatSelection(
-                                title: "Select Your Category",
-                                categoryList: value.data!,
-                                selectedList: selectedSubCatList,
-                                isFromDashboard: false,
-                              ))).then((value) {
+                              PageTransition(
+                                  type: PageTransitionType.fade,
+                                  child: CatSubCatSelection(
+                                    title: "Select Your Category",
+                                    categoryList: value.data!,
+                                    selectedList: selectedSubCatList,
+                                    isFromDashboard: false,
+                                  ))).then((value) {
                             if (value != null) {
                               List<CategorySubCategoryModel> list =
                                   value as List<CategorySubCategoryModel>;

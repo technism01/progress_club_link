@@ -68,7 +68,9 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
               onPressed: () {
                 SharedPrefs().logout().then((value) {
                   Navigator.pushAndRemoveUntil(
-                      context,PageTransition(type: PageTransitionType.leftToRight, child: Login()),
+                      context,
+                      PageTransition(
+                          type: PageTransitionType.leftToRight, child: Login()),
                       (route) => false);
                 });
               },
@@ -166,19 +168,23 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                   }
                 });
               },
-              child: Row(
-                children: const [
-                  Icon(
-                    Icons.add_box_rounded,
-                    size: 18,
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Text("Connect"),
-                  SizedBox(width: 10)
-                ],
-              ),
+              child: context.watch<CategoryProvider>().isLoading
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : Row(
+                      children: const [
+                        Icon(
+                          Icons.add_box_rounded,
+                          size: 18,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text("Connect"),
+                        SizedBox(width: 10)
+                      ],
+                    ),
             ),
           ],
           leading: IconButton(
