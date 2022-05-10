@@ -18,13 +18,7 @@ dependencies:
   whatsapp_unilink: ^2.0.1+1
   http_parser: ^4.0.0
   file_picker: ^4.5.1
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-
-  flutter_lints: ^1.0.0
-
+  url_strategy: ^0.2.0
   bubble_tab_indicator: ^0.1.5
   dio: ^4.0.6
   fluttertoast: ^8.0.7
@@ -32,6 +26,12 @@ dev_dependencies:
   shared_preferences: ^2.0.6
   image_picker: 0.8.4+4
   page_transition: ^2.0.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^1.0.0
 
 flutter:
 

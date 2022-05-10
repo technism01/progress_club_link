@@ -163,9 +163,7 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                                 categoryList: value.data!,
                                 selectedList: const [],
                                 isFromDashboard: true,
-                              ))).then((value) {
-                        //todo call api here
-                      });
+                              ))).then((value) {});
                     }
                   }
                 });

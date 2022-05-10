@@ -7,6 +7,7 @@ import 'package:progress_club_link/providers/authentication_provider.dart';
 import 'package:progress_club_link/providers/category_provider.dart';
 import 'package:progress_club_link/providers/lead_reuquirement_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:url_strategy/url_strategy.dart';
 
 final mySystemTheme = SystemUiOverlayStyle.dark.copyWith(
   statusBarColor: Colors.white,
@@ -16,6 +17,7 @@ final mySystemTheme = SystemUiOverlayStyle.dark.copyWith(
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  setPathUrlStrategy();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
