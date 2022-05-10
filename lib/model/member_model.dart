@@ -29,6 +29,7 @@ class MemberModel {
           memberName: json["name"],
           mobileNumber: json["mobileNumber"],
           email: json["email"],
+          profile: json["profile"],
           pcGroup: json["pcGroup"],
           companyName: json["companyName"],
           selected: list);

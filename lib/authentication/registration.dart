@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
+import 'dart:html';
 import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:progress_club_link/common/PCChapters.dart';
 import 'package:progress_club_link/common/constants.dart';
 import 'package:progress_club_link/common/text_styles.dart';
@@ -38,141 +39,25 @@ class _RegistrationState extends State<Registration> {
   List<CategorySubCategoryModel> selectedSubCatList = [];
   List<int> finalSubList = [];
 
-  Future<File?> _getFromCamera() async {
-    XFile? image = await ImagePicker().pickImage(source: ImageSource.camera);
-    if (image != null) {
-      return File(image.path);
-    }
-    return null;
-  }
-
-  Future<File?> _getFromGallery() async {
-    XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      return File(image.path);
-    }
-    return null;
-  }
-
-  void _imagePick() {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      elevation: 1,
-      isDismissible: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-      ),
-      context: context,
-      builder: (BuildContext bc) {
-        return Wrap(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0, bottom: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const SizedBox(
-                          height: 36,
-                          width: 36,
-                        ),
-                        Text(
-                          "Choose option",
-                          style: MyTextStyles.semiBold.copyWith(fontSize: 16),
-                        ),
-                        SizedBox(
-                          height: 30,
-                          width: 30,
-                          child: FloatingActionButton(
-                            elevation: 0,
-                            backgroundColor: const Color(0xcceeeeee),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Icon(
-                              Icons.close_rounded,
-                              size: 21,
-                              color: Colors.black,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  ListTile(
-                    onTap: () async {
-                      pickedImage = await _getFromCamera();
-
-                      if (pickedImage == null) {
-                        Fluttertoast.showToast(msg: "failed to pick image");
-                      }
-                      setState(() {});
-                      Navigator.pop(context);
-                    },
-                    leading: const Padding(
-                      padding: EdgeInsets.only(right: 10.0, left: 15),
-                      child: Icon(
-                        Icons.camera_alt,
-                        size: 20,
-                      ),
-                    ),
-                    title: Text(
-                      "Camera",
-                      style: MyTextStyles.medium.copyWith(fontSize: 14),
-                    ),
-                  ),
-                  ListTile(
-                    onTap: () async {
-                      pickedImage = await _getFromGallery();
-
-                      if (pickedImage == null) {
-                        Fluttertoast.showToast(msg: "failed to pick image");
-                      }
-                      setState(() {});
-                      Navigator.pop(context);
-                    },
-                    leading: const Padding(
-                      padding: EdgeInsets.only(right: 10.0, left: 15),
-                      child: Icon(
-                        Icons.photo,
-                        size: 20,
-                      ),
-                    ),
-                    title: Text(
-                      "Upload from gallery",
-                      style: MyTextStyles.medium.copyWith(fontSize: 14),
-                    ),
-                  ),
-                ],
-              ),
-            )
-          ],
-        );
-      },
-    );
-  }
-
-  Uint8List? file1;
-
   uploadImage() async {
     // WEB
     final ImagePicker _picker = ImagePicker();
-    XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    XFile? image = await _picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 50,
+    );
     if (image != null) {
       var f = await image.readAsBytes();
       setState(() {
+        pickedImage = File(f, image.name);
         file1 = f;
       });
     } else {
       Fluttertoast.showToast(msg: "Failed to pick image");
     }
   }
+
+  Uint8List? file1;
 
   registerUser() async {
     FormData data = FormData.fromMap({
@@ -184,12 +69,12 @@ class _RegistrationState extends State<Registration> {
     });
 
     if (file1 != null) {
-      final MultipartFile file =
-          MultipartFile.fromBytes(file1!, filename: "profilePhoto");
-      MapEntry<String, MultipartFile> imageFiles = MapEntry("profile", file);
-      data.files.add(imageFiles);
+      log("${pickedImage?.type}");
+      MultipartFile file = MultipartFile.fromBytes(file1!,
+          filename: pickedImage!.name,
+          contentType: MediaType("image", "${pickedImage!.type}"));
+      data.files.add(MapEntry("profile", file));
     }
-
     context
         .read<AuthenticationProvider>()
         .registerUser(data: data)
@@ -424,11 +309,17 @@ class _RegistrationState extends State<Registration> {
                     uploadImage();
                   },
                   child: file1 != null
-                      ? Image.memory(
-                          file1!,
-                          height: 80,
-                          width: 80,
-                        )
+                      ? ClipRRect(
+                    borderRadius: BorderRadius.circular(5),
+
+                        child: Image.memory(
+                            file1!,
+                            height: 60,
+                            width: 60,
+                    fit: BoxFit.cover,
+
+                          ),
+                      )
                       : Container(
                           decoration: BoxDecoration(
                             color: Colors.grey.shade300,

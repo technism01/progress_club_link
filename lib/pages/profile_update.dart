@@ -1,10 +1,13 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:html';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:progress_club_link/common/shared_preferences.dart';
 import 'package:progress_club_link/common/string_constants.dart';
 import 'package:progress_club_link/common/text_styles.dart';
@@ -48,8 +51,11 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
       "pcGroup": txtChapter.text,
       "subCategoryIds": json.encode(finalSubList) //json.encode(finalSubList),
     });
-    if (file1 != null) {
-      final MultipartFile file = MultipartFile.fromBytes(file1!);
+    if (file1 != null && pickedImage != null) {
+      log("${pickedImage?.type}");
+      MultipartFile file = MultipartFile.fromBytes(file1!,
+          filename: pickedImage!.name,
+          contentType: MediaType("image", "${pickedImage!.type}"));
       data.files.add(MapEntry("profile", file));
     }
 
@@ -65,6 +71,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
         } else {
           Fluttertoast.showToast(msg: "Profile Update Successfully!");
           saveUserInLocal(value.data!);
+          log("${value.data?.profile}");
         }
       }
     });
@@ -78,9 +85,11 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
     txtCompanyName.text = sharedPrefs.companyName;
     txtChapter.text = sharedPrefs.pcGroup;
     profileImage = sharedPrefs.profile;
+    log("---${profileImage}");
     selectedSubCatList =
         selectedCategoryTOCategorySubCate(sharedPrefs.selected);
     makeList(selectedSubCatList);
+    setState(() {});
   }
 
   makeList(List<CategorySubCategoryModel> list) {
@@ -95,140 +104,25 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
     });
   }
 
-  Future<File?> _getFromCamera() async {
-    XFile? image = await ImagePicker().pickImage(source: ImageSource.camera);
-    if (image != null) {
-      return File(await image.readAsBytes(), image.name);
-    }
-    return null;
-  }
-
-  Future<File?> _getFromGallery() async {
-    XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      return File(await image.readAsBytes(), image.name);
-    }
-    return null;
-  }
-
   Uint8List? file1;
 
   uploadImage() async {
     // WEB
+
     final ImagePicker _picker = ImagePicker();
-    XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    XFile? image = await _picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 50,
+    );
     if (image != null) {
       var f = await image.readAsBytes();
       setState(() {
+        pickedImage = File(f, image.name);
         file1 = f;
       });
     } else {
       Fluttertoast.showToast(msg: "Failed to pick image");
     }
-  }
-
-  void _imagePick() {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      elevation: 1,
-      isDismissible: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-      ),
-      context: context,
-      builder: (BuildContext bc) {
-        return Wrap(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0, bottom: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const SizedBox(
-                          height: 36,
-                          width: 36,
-                        ),
-                        Text(
-                          "Choose option",
-                          style: MyTextStyles.semiBold.copyWith(fontSize: 16),
-                        ),
-                        SizedBox(
-                          height: 30,
-                          width: 30,
-                          child: FloatingActionButton(
-                            elevation: 0,
-                            backgroundColor: const Color(0xcceeeeee),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Icon(
-                              Icons.close_rounded,
-                              size: 21,
-                              color: Colors.black,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  ListTile(
-                    onTap: () async {
-                      pickedImage = await _getFromCamera();
-
-                      if (pickedImage == null) {
-                        Fluttertoast.showToast(msg: "failed to pick image");
-                      }
-                      setState(() {});
-                      Navigator.pop(context);
-                    },
-                    leading: const Padding(
-                      padding: EdgeInsets.only(right: 10.0, left: 15),
-                      child: Icon(
-                        Icons.camera_alt,
-                        size: 20,
-                      ),
-                    ),
-                    title: Text(
-                      "Camera",
-                      style: MyTextStyles.medium.copyWith(fontSize: 14),
-                    ),
-                  ),
-                  ListTile(
-                    onTap: () async {
-                      pickedImage = await _getFromGallery();
-
-                      if (pickedImage == null) {
-                        Fluttertoast.showToast(msg: "failed to pick image");
-                      }
-                      setState(() {});
-                      Navigator.pop(context);
-                    },
-                    leading: const Padding(
-                      padding: EdgeInsets.only(right: 10.0, left: 15),
-                      child: Icon(
-                        Icons.photo,
-                        size: 20,
-                      ),
-                    ),
-                    title: Text(
-                      "Upload from gallery",
-                      style: MyTextStyles.medium.copyWith(fontSize: 14),
-                    ),
-                  ),
-                ],
-              ),
-            )
-          ],
-        );
-      },
-    );
   }
 
   @override
@@ -261,18 +155,17 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                       // _imagePick();
                       uploadImage();
                     },
-                    child: profileImage == ""
-                        ? file1 != null
-                            ? CircleAvatar(
-                                radius: 60,
-                                backgroundImage: MemoryImage(file1!))
-                            : const CircleAvatar(
+                    child: file1 != null
+                        ? CircleAvatar(
+                            radius: 60, backgroundImage: MemoryImage(file1!))
+                        : profileImage == ""
+                            ? const CircleAvatar(
                                 radius: 60,
                                 backgroundImage: AssetImage("images/user.png"))
-                        : CircleAvatar(
-                            radius: 60,
-                            backgroundImage: NetworkImage(
-                                StringConstants.apiUrl + profileImage))),
+                            : CircleAvatar(
+                                radius: 60,
+                                foregroundImage: NetworkImage(
+                                    StringConstants.imageUrl + profileImage))),
                 MyTextFormField(
                   controller: txtName,
                   hintText: "Enter Name",
