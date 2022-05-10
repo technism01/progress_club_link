@@ -92,6 +92,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.1.2"
+  file_picker:
+    dependency: "direct main"
+    description:
+      name: file_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.5.1"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -136,7 +143,7 @@ packages:
     source: hosted
     version: "0.13.4"
   http_parser:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: http_parser
       url: "https://pub.dartlang.org"
@@ -205,6 +212,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  page_transition:
+    dependency: "direct dev"
+    description:
+      name: page_transition
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.5"
   path:
     dependency: transitive
     description:

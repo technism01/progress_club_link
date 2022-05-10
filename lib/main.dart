@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:progress_club_link/authentication/login.dart';
 import 'package:progress_club_link/common/constants.dart';
 import 'package:progress_club_link/common/shared_preferences.dart';
-import 'package:progress_club_link/pages/dashboard.dart';
 import 'package:progress_club_link/pages/splash_screen.dart';
 import 'package:progress_club_link/providers/authentication_provider.dart';
 import 'package:progress_club_link/providers/category_provider.dart';

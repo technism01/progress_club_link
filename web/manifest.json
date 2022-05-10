@@ -1,10 +1,10 @@
 {
     "name": "Progress Club Business Network",
-    "short_name": "PCBN",
+    "short_name": "Progress Club",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
+    "background_color": "#FFFFFF",
+    "theme_color": "#3a335f",
     "description": "Give business and get business",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,

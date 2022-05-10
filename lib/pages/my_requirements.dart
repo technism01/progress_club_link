@@ -1,20 +1,17 @@
-import 'dart:developer';
-import 'dart:io';
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_club_link/common/constants.dart';
 import 'package:progress_club_link/common/shared_preferences.dart';
 import 'package:progress_club_link/model/myneed_model.dart';
+import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
-import 'package:url_launcher/url_launcher.dart';
+
 import '../common/EmptyScreen.dart';
 import '../common/text_styles.dart';
 import '../component/loading_component.dart';
 import '../component/myRequirementList.dart';
 import '../providers/lead_reuquirement_provider.dart';
-import 'package:provider/provider.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class MyRequirement extends StatefulWidget {
   const MyRequirement({Key? key}) : super(key: key);
@@ -38,10 +35,9 @@ class _MyRequirementState extends State<MyRequirement>
   }
 
   getMyNeeds() async {
-    log("call -->");
     context
         .read<LeadRequirementProvider>()
-        .getMyNeeds(memberID: sharedPrefs.memberId)
+        .getMyNeeds(memberID:sharedPrefs.memberId)
         .then((value) {
       if (value.success == true) {
         if (value.data == null) {
@@ -123,7 +119,7 @@ class _MyRequirementState extends State<MyRequirement>
                     ),
                   )
                 : const EmptyScreen(
-                    title: "No Need Added", image: "assets/images/user.png"),
+                    title: "No Need Added", image: "assets/images/nosearchfound.png"),
       ),
     );
   }

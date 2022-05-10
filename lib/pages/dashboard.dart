@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -10,12 +8,12 @@ import 'package:progress_club_link/pages/my_requirements.dart';
 import 'package:progress_club_link/pages/profile_update.dart';
 import 'package:progress_club_link/providers/category_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:page_transition/page_transition.dart';
 import '../common/TabIndicator.dart';
 import '../common/constants.dart';
 import '../common/text_styles.dart';
-import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
-
 import 'cat_subcat_selection.dart';
+import 'package:page_transition/page_transition.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -70,8 +68,7 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
               onPressed: () {
                 SharedPrefs().logout().then((value) {
                   Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Login()),
+                      context,PageTransition(type: PageTransitionType.leftToRight, child: Login()),
                       (route) => false);
                 });
               },
@@ -118,8 +115,9 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                   Navigator.pop(context);
                   Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => const ProfileUpdate()));
+                      PageTransition(
+                          type: PageTransitionType.rightToLeft,
+                          child: const ProfileUpdate()));
                 },
               ),
               const Divider(
@@ -140,7 +138,6 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
         ),
         appBar: AppBar(
           elevation: 1,
-          centerTitle: true,
           title: Text(
             "Let's Grow Together",
             style: MyTextStyles.semiBold.copyWith(
@@ -154,16 +151,15 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                   if (value.success) {
                     if (value.data != null) {
                       Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CatSubCatSelection(
-                            title: "Search Your Need",
-                            categoryList: value.data!,
-                            selectedList: const [],
-                            isFromDashboard: true,
-                          ),
-                        ),
-                      ).then((value) {
+                          context,
+                          PageTransition(
+                              type: PageTransitionType.fade,
+                              child: CatSubCatSelection(
+                                title: "Search Your Need",
+                                categoryList: value.data!,
+                                selectedList: const [],
+                                isFromDashboard: true,
+                              ))).then((value) {
                         setState(() {});
                       });
                     }
@@ -213,7 +209,7 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                   indicatorSize: TabBarIndicatorSize.label,
                   indicatorColor: appPrimaryColor,
                   indicator:
-                      CustomTabIndicator(color: appPrimaryColor, height: 4),
+                      CustomTabIndicator(color: appPrimaryColor, height: 3),
                   controller: tabController,
                   tabs: const [Tab(text: "My Leads"), Tab(text: "My Needs")]),
               Expanded(

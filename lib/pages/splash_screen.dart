@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:progress_club_link/authentication/login.dart';
 import 'package:progress_club_link/common/shared_preferences.dart';
 import 'package:progress_club_link/pages/dashboard.dart';
+import 'package:page_transition/page_transition.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -16,19 +17,9 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Future.delayed(const Duration(seconds: 2), () {
       if (sharedPrefs.memberId != 0) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const Dashboard(),
-          ),
-        );
+        Navigator.pushReplacement(context, PageTransition(type: PageTransitionType.fade, child: const Dashboard()));
       } else {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const Login(),
-          ),
-        );
+        Navigator.pushReplacement(context, PageTransition(type: PageTransitionType.fade, child: const Login()));
       }
     });
   }

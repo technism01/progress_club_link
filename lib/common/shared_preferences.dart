@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:progress_club_link/common/string_constants.dart';
 import 'package:progress_club_link/model/selected_category_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';

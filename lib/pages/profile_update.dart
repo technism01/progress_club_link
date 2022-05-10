@@ -2,19 +2,22 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:html';
 import 'dart:typed_data';
+
 import 'package:dio/dio.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:progress_club_link/common/shared_preferences.dart';
 import 'package:progress_club_link/common/string_constants.dart';
 import 'package:progress_club_link/common/text_styles.dart';
 import 'package:progress_club_link/helper_functions/SelectedCategoryTOCategorySubCate.dart';
 import 'package:progress_club_link/providers/category_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:image_picker/image_picker.dart';
+
 import '../common/PCChapters.dart';
 import '../component/loading_component.dart';
 import '../helper_functions/save_user_in_local.dart';
@@ -22,7 +25,6 @@ import '../providers/authentication_provider.dart';
 import '../widgets/my_textform_field.dart';
 import '../widgets/rounded_elevatedbutton.dart';
 import 'cat_subcat_selection.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class ProfileUpdate extends StatefulWidget {
   const ProfileUpdate({Key? key}) : super(key: key);
@@ -67,11 +69,16 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
         .then((value) {
       if (value.success == true) {
         if (value.data == null) {
-          Fluttertoast.showToast(msg: "Could not Update");
+          Fluttertoast.showToast(
+              msg: "Could not Update",
+              webBgColor: "linear-gradient(to right, #5A5A5A, #5A5A5A)");
         } else {
-          Fluttertoast.showToast(msg: "Profile Update Successfully!");
+          Fluttertoast.showToast(
+              msg: "Profile Update Successfully!",
+              webBgColor: "linear-gradient(to right, #5A5A5A, #5A5A5A)");
           saveUserInLocal(value.data!);
-          log("${value.data?.profile}");
+          Navigator.of(context).pop();
+          
         }
       }
     });
@@ -85,7 +92,6 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
     txtCompanyName.text = sharedPrefs.companyName;
     txtChapter.text = sharedPrefs.pcGroup;
     profileImage = sharedPrefs.profile;
-    log("---${profileImage}");
     selectedSubCatList =
         selectedCategoryTOCategorySubCate(sharedPrefs.selected);
     makeList(selectedSubCatList);
@@ -121,7 +127,9 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
         file1 = f;
       });
     } else {
-      Fluttertoast.showToast(msg: "Failed to pick image");
+      Fluttertoast.showToast(
+          msg: "Failed to pick image",
+          webBgColor: "linear-gradient(to right, #5A5A5A, #5A5A5A)");
     }
   }
 
@@ -130,7 +138,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-        centerTitle: true,
+        elevation: 1,
         automaticallyImplyLeading: false,
         leading: IconButton(
             icon: const Icon(CupertinoIcons.back),
@@ -257,14 +265,12 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                         if (value.data != null) {
                           Navigator.push(
                               context,
-                              MaterialPageRoute(
-                                builder: (context) => CatSubCatSelection(
-                                  title: "Select Your Category",
-                                  categoryList: value.data!,
-                                  selectedList: selectedSubCatList,
-                                  isFromDashboard: false,
-                                ),
-                              )).then((value) {
+                              PageTransition(type: PageTransitionType.fade, child: CatSubCatSelection(
+                                title: "Select Your Category",
+                                categoryList: value.data!,
+                                selectedList: selectedSubCatList,
+                                isFromDashboard: false,
+                              ))).then((value) {
                             if (value != null) {
                               List<CategorySubCategoryModel> list =
                                   value as List<CategorySubCategoryModel>;

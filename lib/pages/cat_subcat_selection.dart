@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_club_link/common/constants.dart';
@@ -9,8 +7,10 @@ import 'package:progress_club_link/helper_functions/SelectedCategoryTOCategorySu
 import 'package:progress_club_link/helper_functions/getSelectedSubList.dart';
 import 'package:progress_club_link/model/category_model.dart';
 import 'package:progress_club_link/providers/category_provider.dart';
+import 'package:progress_club_link/widgets/my_textform_field.dart';
 import 'package:provider/provider.dart';
 
+import '../common/EmptyScreen.dart';
 import '../common/text_styles.dart';
 
 class CatSubCatSelection extends StatefulWidget {
@@ -76,12 +76,12 @@ class _CatSubCatSelectionState extends State<CatSubCatSelection> {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
+        elevation: 1,
         title: Text(widget.title,
             style: MyTextStyles.semiBold.copyWith(
               fontSize: 16,
             )),
         automaticallyImplyLeading: false,
-        centerTitle: true,
         leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
@@ -117,7 +117,7 @@ class _CatSubCatSelectionState extends State<CatSubCatSelection> {
       body: context.watch<CategoryProvider>().isLoading
           ? const LoadingComponent()
           : VerticalTabs(
-              tabsWidth: size.width * 0.34,
+              tabsWidth: size.width * 0.35,
               contentScrollAxis: Axis.horizontal,
               changePageDuration: const Duration(milliseconds: 500),
               indicatorColor: appPrimaryColor,
@@ -219,6 +219,8 @@ class SubCategoryView extends StatefulWidget {
 
 class _SubCategoryViewState extends State<SubCategoryView> {
   List<int> selectedList = [];
+  TextEditingController searchText = TextEditingController();
+  final List<SubCategoryModel> searchedCategoryList = [];
 
   @override
   void initState() {
@@ -228,39 +230,116 @@ class _SubCategoryViewState extends State<SubCategoryView> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: widget.subCategoryList.length,
-      itemBuilder: (context, index) {
-        return CheckboxListTile(
-          value: selectedList.contains(widget.subCategoryList[index].id),
-          activeColor: appPrimaryColor,
-          dense: true,
-          contentPadding: const EdgeInsets.only(left: 6),
-          title: Text(
-            widget.subCategoryList[index].name,
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey.shade800,
-              fontWeight: FontWeight.w500,
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: MyTextFormField(
+            onChanged: onSearch,
+            contentPadding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
+            icon: const Icon(
+              CupertinoIcons.search,
+              color: Colors.grey,
+              size: 20,
             ),
+            hintText: "Search Category you want",
           ),
-          controlAffinity: ListTileControlAffinity.leading,
-          onChanged: (value) {
-            if (value != null) {
-              if (value) {
-                setState(() {
-                  selectedList.add(widget.subCategoryList[index].id);
-                });
-              } else {
-                setState(() {
-                  selectedList.remove(widget.subCategoryList[index].id);
-                });
-              }
-              widget.onSelect(selectedList);
-            }
-          },
-        );
-      },
+        ),
+        Expanded(
+            child: widget.subCategoryList.isNotEmpty
+                ? searchedCategoryList.isNotEmpty || searchText.text.isNotEmpty
+                    ? ListView.builder(
+                        itemCount: searchedCategoryList.length,
+                        itemBuilder: (context, index) {
+                          return CheckboxListTile(
+                            value: selectedList
+                                .contains(searchedCategoryList[index].id),
+                            activeColor: appPrimaryColor,
+                            dense: true,
+                            contentPadding: const EdgeInsets.only(left: 6),
+                            title: Text(
+                              searchedCategoryList[index].name,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey.shade800,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            controlAffinity: ListTileControlAffinity.leading,
+                            onChanged: (value) {
+                              if (value != null) {
+                                if (value) {
+                                  setState(() {
+                                    selectedList
+                                        .add(searchedCategoryList[index].id);
+                                  });
+                                } else {
+                                  setState(() {
+                                    selectedList.remove(
+                                        searchedCategoryList[index].id);
+                                  });
+                                }
+                                widget.onSelect(selectedList);
+                              }
+                            },
+                          );
+                        },
+                      )
+                    : ListView.builder(
+                        itemCount: widget.subCategoryList.length,
+                        itemBuilder: (context, index) {
+                          return CheckboxListTile(
+                            value: selectedList
+                                .contains(widget.subCategoryList[index].id),
+                            activeColor: appPrimaryColor,
+                            dense: true,
+                            contentPadding: const EdgeInsets.only(left: 6),
+                            title: Text(
+                              widget.subCategoryList[index].name,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey.shade800,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            controlAffinity: ListTileControlAffinity.leading,
+                            onChanged: (value) {
+                              if (value != null) {
+                                if (value) {
+                                  setState(() {
+                                    selectedList
+                                        .add(widget.subCategoryList[index].id);
+                                  });
+                                } else {
+                                  setState(() {
+                                    selectedList.remove(
+                                        widget.subCategoryList[index].id);
+                                  });
+                                }
+                                widget.onSelect(selectedList);
+                              }
+                            },
+                          );
+                        },
+                      )
+                : const EmptyScreen(
+                    title: "No Subcategory Available",
+                    image: "assets/images/nosearchfound.png"))
+      ],
     );
+  }
+
+  onSearch(String text) async {
+    searchedCategoryList.clear();
+    if (text.isEmpty) {
+      setState(() {});
+      return;
+    }
+    for (var subcategory in widget.subCategoryList) {
+      if (subcategory.name.contains(text)) {
+        searchedCategoryList.add(subcategory);
+      }
+    }
+    setState(() {});
   }
 }

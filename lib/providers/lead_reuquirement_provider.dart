@@ -2,10 +2,10 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:progress_club_link/common/string_constants.dart';
 import 'package:progress_club_link/model/myneed_model.dart';
 import 'package:progress_club_link/model/response_model.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import '../model/mylead_model.dart';
 
@@ -44,7 +44,8 @@ class LeadRequirementProvider extends ChangeNotifier {
       if (response.statusCode == 404) {
         responseClass.success = false;
         responseClass.message = response.data["msg"];
-        Fluttertoast.showToast(msg: responseClass.message);
+        Fluttertoast.showToast(msg: responseClass.message,webBgColor:
+        "linear-gradient(to right, #5A5A5A, #5A5A5A)");
         isLoading = false;
         notifyListeners();
       }
@@ -55,7 +56,8 @@ class LeadRequirementProvider extends ChangeNotifier {
       }
       isLoading = false;
       notifyListeners();
-      Fluttertoast.showToast(msg: StringConstants.errorMessage);
+      Fluttertoast.showToast(msg: StringConstants.errorMessage,webBgColor:
+      "linear-gradient(to right, #5A5A5A, #5A5A5A)");
       return responseClass;
     } catch (e) {
       isLoading = false;
@@ -97,7 +99,8 @@ class LeadRequirementProvider extends ChangeNotifier {
       if (response.statusCode == 404) {
         responseClass.success = false;
         responseClass.message = response.data["msg"];
-        Fluttertoast.showToast(msg: responseClass.message);
+        Fluttertoast.showToast(msg: responseClass.message,webBgColor:
+        "linear-gradient(to right, #5A5A5A, #5A5A5A)");
         isLoading = false;
         notifyListeners();
       }
@@ -108,7 +111,8 @@ class LeadRequirementProvider extends ChangeNotifier {
       }
       isLoading = false;
       notifyListeners();
-      Fluttertoast.showToast(msg: StringConstants.errorMessage);
+      Fluttertoast.showToast(msg: StringConstants.errorMessage,webBgColor:
+      "linear-gradient(to right, #5A5A5A, #5A5A5A)");
       return responseClass;
     } catch (e) {
       isLoading = false;
