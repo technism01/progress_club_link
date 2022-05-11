@@ -69,34 +69,38 @@ class _MyRequirementListState extends State<MyRequirementList> {
                                           },
                                         ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 20.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        e.name!,
-                                        style: MyTextStyles.semiBold.copyWith(
-                                          fontSize: 14,
-                                          color: appPrimaryColor,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 1.0),
-                                        child: Text(
-                                          e.companyName!,
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 20.0),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          e.name!,
                                           style: MyTextStyles.semiBold.copyWith(
-                                            fontSize: 12,
-                                            color:
-                                                Colors.black.withOpacity(0.5),
+                                            fontSize: 14,
+                                            color: appPrimaryColor,
                                           ),
-                                          overflow: TextOverflow.ellipsis,
                                         ),
-                                      )
-                                    ],
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 1.0),
+                                          child: Text(
+                                            e.companyName!,
+                                            style: MyTextStyles.semiBold.copyWith(
+                                              fontSize: 12,
+                                              color:
+                                                  Colors.black.withOpacity(0.5),
+                                            ),
+                                            maxLines: 1,
+                                            softWrap: true,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ],
