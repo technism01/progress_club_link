@@ -28,14 +28,13 @@ class _MyRequirementState extends State<MyRequirement>
   @override
   void initState() {
     super.initState();
-    WidgetsFlutterBinding.ensureInitialized();
-    Future.delayed(const Duration(seconds: 0)).then((value) {
-      getMyNeeds();
+    Future.delayed(const Duration(seconds: 0)).then((value)async {
+     await getMyNeeds();
     });
   }
 
   getMyNeeds() async {
-    context
+   await context
         .read<LeadRequirementProvider>()
         .getMyNeeds(memberID:sharedPrefs.memberId)
         .then((value) {
@@ -126,6 +125,7 @@ class _MyRequirementState extends State<MyRequirement>
 
   Widget myNeedView({required List<NeedSubCategoryModel> subCategory}) {
     return ListView.builder(
+      physics: NeverScrollableScrollPhysics(),
         itemCount: subCategory.length,
         itemBuilder: (context, index) {
           return StickyHeader(

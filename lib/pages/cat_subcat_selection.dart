@@ -89,7 +89,7 @@ class _CatSubCatSelectionState extends State<CatSubCatSelection> {
             },
             icon: const Icon(CupertinoIcons.back)),
         actions: [
-          if (!isEmptyList)
+          if (!isEmptyList || widget.isFromDashboard)
             TextButton(
               onPressed: () {
                 if (widget.isFromDashboard) {
@@ -98,7 +98,15 @@ class _CatSubCatSelectionState extends State<CatSubCatSelection> {
                       .addCategorySubcategory(selectedSubCategories)
                       .then((value) {
                     if (value.success) {
-                      Navigator.pushReplacement(context, PageTransition(type: PageTransitionType.fade, child: const Dashboard(initialIndex: 1,)));
+                      Navigator.pushReplacement(
+                        context,
+                        PageTransition(
+                          type: PageTransitionType.fade,
+                          child: const Dashboard(
+                            initialIndex: 1,
+                          ),
+                        ),
+                      );
                     }
                   });
                 } else {
