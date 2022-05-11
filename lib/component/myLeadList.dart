@@ -100,7 +100,7 @@ class _MyLeadListState extends State<MyLeadList> {
                                 onTap: () async {
                                   var url = WhatsAppUnilink(
                                     phoneNumber: '+91${e.mobileNumber}',
-                                    text: "Hey",
+                                    text: "Hi",
                                   );
 
                                   await launchUrl(Uri.parse('$url'));
@@ -137,7 +137,7 @@ class _MyLeadListState extends State<MyLeadList> {
             height: 50,
             child: Center(
               child: Text(
-                "No Lead Available",
+                "No data found",
                 style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
               ),
             ),
