@@ -14,6 +14,7 @@ import 'package:progress_club_link/common/PCChapters.dart';
 import 'package:progress_club_link/common/constants.dart';
 import 'package:progress_club_link/component/loading_component.dart';
 import 'package:progress_club_link/helper_functions/save_user_in_local.dart';
+import 'package:progress_club_link/model/category_model.dart';
 import 'package:progress_club_link/pages/cat_subcat_selection.dart';
 import 'package:progress_club_link/pages/dashboard.dart';
 import 'package:progress_club_link/providers/authentication_provider.dart';
@@ -38,9 +39,32 @@ class _RegistrationState extends State<Registration> {
   File? pickedImage;
   List<CategorySubCategoryModel> selectedSubCatList = [];
   List<int> finalSubList = [];
+  Uint8List? file1;
+  List<CategoryModel> categoryList = [];
+  CategoryModel? selectedCategory;
+  SubCategoryModel? selectedSubCategory;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      //getCategoryData();
+    });
+  }
+
+  getCategoryData() async {
+    await context.read<CategoryProvider>().getCategory().then((value) {
+      if (value.success) {
+        if (value.data != null) {
+          setState(() {
+            categoryList = value.data!;
+          });
+        }
+      }
+    });
+  }
 
   uploadImage() async {
-    // WEB
     final ImagePicker _picker = ImagePicker();
     XFile? image = await _picker.pickImage(
       source: ImageSource.gallery,
@@ -58,8 +82,6 @@ class _RegistrationState extends State<Registration> {
           webBgColor: "linear-gradient(to right, #5A5A5A, #5A5A5A)");
     }
   }
-
-  Uint8List? file1;
 
   registerUser() async {
     FormData data = FormData.fromMap({
@@ -96,7 +118,9 @@ class _RegistrationState extends State<Registration> {
               context,
               PageTransition(
                 type: PageTransitionType.rightToLeft,
-                child: const Dashboard(initialIndex: 0,),
+                child: const Dashboard(
+                  initialIndex: 0,
+                ),
               ),
               (route) => false);
         }
@@ -106,7 +130,6 @@ class _RegistrationState extends State<Registration> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       body: Padding(
@@ -134,8 +157,8 @@ class _RegistrationState extends State<Registration> {
                   hintText: "Enter Name",
                   label: "Name",
                   keyboardType: TextInputType.name,
-                  validator: (phone) {
-                    if (phone!.isEmpty) {
+                  validator: (value) {
+                    if (value!.isEmpty) {
                       return 'Please enter your name';
                     }
                     return null;
@@ -150,14 +173,14 @@ class _RegistrationState extends State<Registration> {
                   maxLength: 10,
                   keyboardType: TextInputType.number,
                   label: "Mobile Number",
-                  validator: (phone) {
+                  validator: (value) {
                     Pattern pattern = r'(^(?:[+0]9)?[0-9]{10,}$)';
                     RegExp regExp = RegExp(pattern.toString());
-                    if (phone!.isEmpty) {
+                    if (value!.isEmpty) {
                       return 'Please enter mobile number';
-                    } else if (!regExp.hasMatch(phone)) {
+                    } else if (!regExp.hasMatch(value)) {
                       return 'Please enter valid mobile number';
-                    } else if (phone.length != 10) {
+                    } else if (value.length != 10) {
                       return "Please enter valid mobile number";
                     }
                     return null;
@@ -174,8 +197,8 @@ class _RegistrationState extends State<Registration> {
                   hintText: "Enter Company Name",
                   keyboardType: TextInputType.text,
                   label: "Company Name",
-                  validator: (phone) {
-                    if (phone!.isEmpty) {
+                  validator: (value) {
+                    if (value!.isEmpty) {
                       return 'Please enter company name';
                     }
                     return null;
@@ -196,8 +219,8 @@ class _RegistrationState extends State<Registration> {
                       hintText: "Select Chapter",
                       keyboardType: TextInputType.number,
                       label: "Select Your Chapter",
-                      validator: (phone) {
-                        if (phone!.isEmpty) {
+                      validator: (value) {
+                        if (value!.isEmpty) {
                           return 'Please select chapter';
                         }
                         return null;
@@ -209,78 +232,197 @@ class _RegistrationState extends State<Registration> {
                 const SizedBox(
                   height: 10,
                 ),
-                GestureDetector(
-                  onTap: () async {
-                    await context
-                        .read<CategoryProvider>()
-                        .getCategory()
-                        .then((value) {
-                      if (value.success) {
-                        if (value.data != null) {
-                          Navigator.push(
-                              context,
-                              PageTransition(
-                                  type: PageTransitionType.fade,
-                                  child: CatSubCatSelection(
-                                    title: "Select Your Category",
-                                    categoryList: value.data!,
-                                    selectedList: selectedSubCatList,
-                                    isFromDashboard: false,
-                                  ))).then((value) {
-                            if (value != null) {
-                              List<CategorySubCategoryModel> list =
-                                  value as List<CategorySubCategoryModel>;
-                              List<int> finalList = [];
-                              for (var element in list) {
-                                for (var sub in element.subIdList) {
-                                  finalList.add(sub);
-                                }
-                              }
-                              setState(() {
-                                selectedSubCatList = value;
-                                finalSubList = finalList;
-                              });
-                            }
-                          });
-                        }
-                      }
-                    });
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => CatSubCatSelection(
-                    //       selectedList: selectedSubCatList,
-                    //     ),
-                    //   ),
-                    // ).then((value) {
-                    //   if (value != null) {
-                    //     List finalList = [];
-                    //     for (var element in value) {
-                    //       for (var sub in element) {
-                    //         finalList.add(sub);
-                    //       }
-                    //     }
-                    //     setState(() {
-                    //       selectedSubCatList = value;
-                    //       finalSubList = finalList;
-                    //     });
-                    //   }
-                    // });
-                  },
-                  child: AbsorbPointer(
-                    child: MyTextFormField(
-                      hintText: finalSubList.isNotEmpty
-                          ? "${finalSubList.length} selected"
-                          : "Select business category",
-                      keyboardType: TextInputType.number,
-                      label: "Business Category",
-                      validator: (phone) {
-                        if (finalSubList.isEmpty) {
-                          return 'Please select business category';
-                        }
-                        return null;
-                      },
-                      suffixIcon: const Icon(Icons.add),
+                Text(
+                  "Business",
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: appPrimaryColor,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(
+                  height: 6,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(7),
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 0.5,
+                    ),
+                  ),
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              "Category:",
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: appPrimaryColor,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 5,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(7),
+                                border: Border.all(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              height: 40,
+                              alignment: Alignment.centerLeft,
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 10),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    "Select category",
+                                    style: TextStyle(fontSize: 12),
+                                  ),
+                                  Icon(
+                                    Icons.add,
+                                    color: appPrimaryColor,
+                                    size: 18,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              "Sub Category:",
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: appPrimaryColor,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 5,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(7),
+                                border: Border.all(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              height: 40,
+                              alignment: Alignment.centerLeft,
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 10),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    "Select sub category",
+                                    style: TextStyle(fontSize: 12),
+                                  ),
+                                  Icon(
+                                    Icons.add,
+                                    color: appPrimaryColor,
+                                    size: 18,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              "Products:",
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: appPrimaryColor,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 5,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(7),
+                                border: Border.all(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              height: 40,
+                              alignment: Alignment.centerLeft,
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 10),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    "Select products",
+                                    style: TextStyle(fontSize: 12),
+                                  ),
+                                  Icon(
+                                    Icons.add,
+                                    color: appPrimaryColor,
+                                    size: 18,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 6,
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () {},
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Icon(
+                          Icons.add,
+                          size: 16,
+                          color: appPrimaryColor,
+                        ),
+                        Text(
+                          "Add New",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: appPrimaryColor,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -300,7 +442,6 @@ class _RegistrationState extends State<Registration> {
                 ),
                 InkWell(
                   onTap: () {
-                    // _imagePick();
                     uploadImage();
                   },
                   child: file1 != null
@@ -412,6 +553,49 @@ class _RegistrationState extends State<Registration> {
                       child: Padding(
                         padding: const EdgeInsets.all(15.0),
                         child: Text(pcChapterList[index]),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return const Divider(
+                      height: 0.2,
+                      thickness: 0.4,
+                      endIndent: 10,
+                      indent: 10,
+                    );
+                  },
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
+  selectCategory(Function(String value) onSelect) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Text("Select Category",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontFamily: "Poppins",
+                        fontSize: 15)),
+              ),
+              Expanded(
+                child: ListView.separated(
+                  itemCount: categoryList.length,
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Text(categoryList[index].name),
                       ),
                     );
                   },

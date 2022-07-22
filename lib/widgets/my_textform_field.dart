@@ -70,14 +70,16 @@ class _MyTextFormFieldState extends State<MyTextFormField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        widget.label==null?const SizedBox():Text(
-          widget.label!,
-          style: TextStyle(
-            fontSize: 13,
-            color: appPrimaryColor,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
+        widget.label == null
+            ? const SizedBox()
+            : Text(
+                widget.label!,
+                style: TextStyle(
+                  fontSize: 13,
+                  color: appPrimaryColor,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
         const SizedBox(
           height: 6,
         ),
