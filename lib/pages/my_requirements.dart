@@ -1,5 +1,6 @@
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_club_link/common/constants.dart';
 import 'package:progress_club_link/common/shared_preferences.dart';
@@ -46,7 +47,9 @@ class _MyRequirementState extends State<MyRequirement>
             _tabController =
                 TabController(length: myNeedList.length, vsync: this);
           });
-          print(myNeedList.length);
+          if (kDebugMode) {
+            print(myNeedList.length);
+          }
         }
       }
     });

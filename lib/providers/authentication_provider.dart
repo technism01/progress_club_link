@@ -50,8 +50,9 @@ class AuthenticationProvider extends ChangeNotifier {
         responseClass.success = false;
         responseClass.message = response.data["msg"];
         responseClass.data = null;
-        Fluttertoast.showToast(msg: responseClass.message,webBgColor:
-        "linear-gradient(to right, #5A5A5A, #5A5A5A)");
+        Fluttertoast.showToast(
+            msg: responseClass.message,
+            webBgColor: "linear-gradient(to right, #5A5A5A, #5A5A5A)");
         isLoading = false;
         notifyListeners();
       }
@@ -59,8 +60,9 @@ class AuthenticationProvider extends ChangeNotifier {
         responseClass.success = false;
         responseClass.message = response.data["msg"];
         responseClass.data = null;
-        Fluttertoast.showToast(msg: responseClass.message,webBgColor:
-        "linear-gradient(to right, #5A5A5A, #5A5A5A)");
+        Fluttertoast.showToast(
+            msg: responseClass.message,
+            webBgColor: "linear-gradient(to right, #5A5A5A, #5A5A5A)");
         isLoading = false;
         notifyListeners();
       }
@@ -71,8 +73,9 @@ class AuthenticationProvider extends ChangeNotifier {
       }
       isLoading = false;
       notifyListeners();
-      Fluttertoast.showToast(msg: StringConstants.errorMessage,webBgColor:
-      "linear-gradient(to right, #5A5A5A, #5A5A5A)");
+      Fluttertoast.showToast(
+          msg: StringConstants.errorMessage,
+          webBgColor: "linear-gradient(to right, #5A5A5A, #5A5A5A)");
       return responseClass;
     } catch (e) {
       isLoading = false;
@@ -122,8 +125,9 @@ class AuthenticationProvider extends ChangeNotifier {
       if (response.statusCode == 404) {
         responseClass.success = false;
         responseClass.message = response.data["msg"];
-        Fluttertoast.showToast(msg: responseClass.message,webBgColor:
-        "linear-gradient(to right, #5A5A5A, #5A5A5A)");
+        Fluttertoast.showToast(
+            msg: responseClass.message,
+            webBgColor: "linear-gradient(to right, #5A5A5A, #5A5A5A)");
         isLoading = false;
         notifyListeners();
       }
@@ -134,8 +138,9 @@ class AuthenticationProvider extends ChangeNotifier {
       }
       isLoading = false;
       notifyListeners();
-      Fluttertoast.showToast(msg: StringConstants.errorMessage,webBgColor:
-      "linear-gradient(to right, #5A5A5A, #5A5A5A)");
+      Fluttertoast.showToast(
+          msg: StringConstants.errorMessage,
+          webBgColor: "linear-gradient(to right, #5A5A5A, #5A5A5A)");
       return responseClass;
     } catch (e) {
       isLoading = false;
@@ -180,8 +185,9 @@ class AuthenticationProvider extends ChangeNotifier {
       if (response.statusCode == 400) {
         responseClass.success = false;
         responseClass.message = response.data["msg"];
-        Fluttertoast.showToast(msg: responseClass.message,webBgColor:
-            "linear-gradient(to right, #5A5A5A, #5A5A5A)");
+        Fluttertoast.showToast(
+            msg: responseClass.message,
+            webBgColor: "linear-gradient(to right, #5A5A5A, #5A5A5A)");
         isLoading = false;
         notifyListeners();
       }

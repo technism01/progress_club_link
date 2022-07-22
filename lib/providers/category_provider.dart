@@ -43,8 +43,9 @@ class CategoryProvider extends ChangeNotifier {
       if (response.statusCode == 404) {
         responseClass.success = false;
         responseClass.message = response.data["msg"];
-        Fluttertoast.showToast(msg: responseClass.message,webBgColor:
-        "linear-gradient(to right, #5A5A5A, #5A5A5A)");
+        Fluttertoast.showToast(
+            msg: responseClass.message,
+            webBgColor: "linear-gradient(to right, #5A5A5A, #5A5A5A)");
         isLoading = false;
         notifyListeners();
       }
@@ -55,8 +56,9 @@ class CategoryProvider extends ChangeNotifier {
       }
       isLoading = false;
       notifyListeners();
-      Fluttertoast.showToast(msg: StringConstants.errorMessage,webBgColor:
-      "linear-gradient(to right, #5A5A5A, #5A5A5A)");
+      Fluttertoast.showToast(
+          msg: StringConstants.errorMessage,
+          webBgColor: "linear-gradient(to right, #5A5A5A, #5A5A5A)");
       return responseClass;
     } catch (e) {
       isLoading = false;
@@ -75,14 +77,14 @@ class CategoryProvider extends ChangeNotifier {
 
     List<AddCategoryModel> addCategoryModel = [];
 
-    addList.forEach((element) {
-      element.subIdList.forEach((value) {
+    for (var element in addList) {
+      for (var value in element.subIdList) {
         addCategoryModel.add(AddCategoryModel(
             memberId: sharedPrefs.memberId,
             categoryId: element.id,
             subCategoryId: value));
-      });
-    });
+      }
+    }
 
     var data = {"memberId": sharedPrefs.memberId, "requests": addCategoryModel};
 
@@ -102,8 +104,9 @@ class CategoryProvider extends ChangeNotifier {
       if (response.statusCode == 201) {
         responseClass.success = true;
         responseClass.message = response.data["msg"];
-        Fluttertoast.showToast(msg: responseClass.message,webBgColor:
-        "linear-gradient(to right, #5A5A5A, #5A5A5A)");
+        Fluttertoast.showToast(
+            msg: responseClass.message,
+            webBgColor: "linear-gradient(to right, #5A5A5A, #5A5A5A)");
         isLoading = false;
         notifyListeners();
         return responseClass;
@@ -111,8 +114,9 @@ class CategoryProvider extends ChangeNotifier {
       if (response.statusCode == 400) {
         responseClass.success = false;
         responseClass.message = response.data["msg"];
-        Fluttertoast.showToast(msg: responseClass.message,webBgColor:
-        "linear-gradient(to right, #5A5A5A, #5A5A5A)");
+        Fluttertoast.showToast(
+            msg: responseClass.message,
+            webBgColor: "linear-gradient(to right, #5A5A5A, #5A5A5A)");
         isLoading = false;
         notifyListeners();
       }
@@ -123,8 +127,9 @@ class CategoryProvider extends ChangeNotifier {
       }
       isLoading = false;
       notifyListeners();
-      Fluttertoast.showToast(msg: StringConstants.errorMessage,webBgColor:
-      "linear-gradient(to right, #5A5A5A, #5A5A5A)");
+      Fluttertoast.showToast(
+          msg: StringConstants.errorMessage,
+          webBgColor: "linear-gradient(to right, #5A5A5A, #5A5A5A)");
       return responseClass;
     } catch (e) {
       isLoading = false;
@@ -170,8 +175,9 @@ class CategoryProvider extends ChangeNotifier {
       if (response.statusCode == 400) {
         responseClass.success = false;
         responseClass.message = response.data["msg"];
-        Fluttertoast.showToast(msg: responseClass.message,webBgColor:
-        "linear-gradient(to right, #5A5A5A, #5A5A5A)");
+        Fluttertoast.showToast(
+            msg: responseClass.message,
+            webBgColor: "linear-gradient(to right, #5A5A5A, #5A5A5A)");
         isLoading = false;
         notifyListeners();
       }
@@ -182,8 +188,9 @@ class CategoryProvider extends ChangeNotifier {
       }
       isLoading = false;
       notifyListeners();
-      Fluttertoast.showToast(msg: StringConstants.errorMessage,webBgColor:
-      "linear-gradient(to right, #5A5A5A, #5A5A5A)");
+      Fluttertoast.showToast(
+          msg: StringConstants.errorMessage,
+          webBgColor: "linear-gradient(to right, #5A5A5A, #5A5A5A)");
       return responseClass;
     } catch (e) {
       isLoading = false;

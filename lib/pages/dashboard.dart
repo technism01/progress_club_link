@@ -13,7 +13,6 @@ import '../common/TabIndicator.dart';
 import '../common/constants.dart';
 import '../common/text_styles.dart';
 import 'cat_subcat_selection.dart';
-import 'package:page_transition/page_transition.dart';
 
 class Dashboard extends StatefulWidget {
   final int initialIndex;
@@ -26,7 +25,6 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   late TabController tabController;
-  bool showFab = true;
   var scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -72,7 +70,8 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                   Navigator.pushAndRemoveUntil(
                       context,
                       PageTransition(
-                          type: PageTransitionType.leftToRight, child: Login()),
+                          type: PageTransitionType.leftToRight,
+                          child: const Login()),
                       (route) => false);
                 });
               },

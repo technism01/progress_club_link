@@ -150,6 +150,13 @@ class _VerticalTabsState extends State<VerticalTabs>
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: <Widget>[
+                                Expanded(
+                                  child: Container(
+                                    alignment: alignment,
+                                    padding: const EdgeInsets.all(5),
+                                    child: child,
+                                  ),
+                                ),
                                 ScaleTransition(
                                   child: Container(
                                     width: widget.indicatorWidth,
@@ -161,13 +168,6 @@ class _VerticalTabsState extends State<VerticalTabs>
                                       parent: animationControllers[index],
                                       curve: Curves.elasticOut,
                                     ),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Container(
-                                    alignment: alignment,
-                                    padding: const EdgeInsets.all(5),
-                                    child: child,
                                   ),
                                 ),
                               ],

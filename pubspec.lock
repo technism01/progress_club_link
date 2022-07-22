@@ -16,7 +16,7 @@ packages:
     source: hosted
     version: "2.1.0"
   bubble_tab_indicator:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: bubble_tab_indicator
       url: "https://pub.dartlang.org"
@@ -65,7 +65,7 @@ packages:
     source: hosted
     version: "1.0.4"
   dio:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: dio
       url: "https://pub.dartlang.org"
@@ -129,7 +129,7 @@ packages:
     source: sdk
     version: "0.0.0"
   fluttertoast:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: fluttertoast
       url: "https://pub.dartlang.org"
@@ -150,7 +150,7 @@ packages:
     source: hosted
     version: "4.0.0"
   image_picker:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: image_picker
       url: "https://pub.dartlang.org"
@@ -213,7 +213,7 @@ packages:
     source: hosted
     version: "1.0.0"
   page_transition:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: page_transition
       url: "https://pub.dartlang.org"
@@ -269,14 +269,14 @@ packages:
     source: hosted
     version: "4.2.4"
   provider:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: provider
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.0"
   shared_preferences:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: shared_preferences
       url: "https://pub.dartlang.org"
@@ -448,6 +448,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.0"
+  url_strategy:
+    dependency: "direct main"
+    description:
+      name: url_strategy
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   vector_math:
     dependency: transitive
     description:

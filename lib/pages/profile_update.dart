@@ -18,7 +18,6 @@ import 'package:progress_club_link/helper_functions/SelectedCategoryTOCategorySu
 import 'package:progress_club_link/pages/dashboard.dart';
 import 'package:progress_club_link/providers/category_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:page_transition/page_transition.dart';
 import '../common/PCChapters.dart';
 import '../component/loading_component.dart';
 import '../helper_functions/save_user_in_local.dart';
@@ -72,7 +71,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
       log("${pickedImage?.type}");
       MultipartFile file = MultipartFile.fromBytes(file1!,
           filename: pickedImage!.name,
-          contentType: MediaType("image", "${pickedImage!.type}"));
+          contentType: MediaType("image", pickedImage!.type));
       data.files.add(MapEntry("profile", file));
     }
 
@@ -93,7 +92,11 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
               webBgColor: "linear-gradient(to right, #5A5A5A, #5A5A5A)");
           saveUserInLocal(value.data!);
           Navigator.of(context).pushAndRemoveUntil(
-            PageTransition(type: PageTransitionType.leftToRight, child: const Dashboard(initialIndex: 0,)),
+            PageTransition(
+                type: PageTransitionType.leftToRight,
+                child: const Dashboard(
+                  initialIndex: 0,
+                )),
             (route) => false,
           );
         }

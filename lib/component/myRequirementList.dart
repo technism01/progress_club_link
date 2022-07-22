@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:whatsapp_unilink/whatsapp_unilink.dart';
 
 import '../common/constants.dart';
+import '../common/shared_preferences.dart';
 import '../common/text_styles.dart';
 
 class MyRequirementList extends StatefulWidget {
@@ -53,27 +54,26 @@ class _MyRequirementListState extends State<MyRequirementList> {
                                           height: 60,
                                           width: 60,
                                         )
-                                      : Image.network(
-                                          StringConstants.imageUrl +
-                                              "${e.profile}",
-                                          fit: BoxFit.fill,
-                                          height: 60,
+                                      : Container(
                                           width: 60,
-                                          errorBuilder: (BuildContext context,
-                                              Object exception,
-                                              StackTrace? stackTrace) {
-                                            return Image.asset(
-                                                "assets/images/user.png",
-                                                height: 60,
-                                                width: 60);
-                                          },
+                                          height: 60,
+                                          decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  alignment:
+                                                      FractionalOffset.center,
+                                                  fit: BoxFit.fitWidth,
+                                                  image: NetworkImage(
+                                                    StringConstants.imageUrl +
+                                                        "${e.profile}",
+                                                  ))),
                                         ),
                                 ),
                                 Expanded(
                                   child: Padding(
                                     padding: const EdgeInsets.only(left: 20.0),
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
@@ -88,8 +88,22 @@ class _MyRequirementListState extends State<MyRequirementList> {
                                           padding:
                                               const EdgeInsets.only(top: 1.0),
                                           child: Text(
+                                            e.pcGroup!,
+                                            style:
+                                                MyTextStyles.semiBold.copyWith(
+                                              fontSize: 10,
+                                              color:
+                                                  Colors.black.withOpacity(0.5),
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 1.0),
+                                          child: Text(
                                             e.companyName!,
-                                            style: MyTextStyles.semiBold.copyWith(
+                                            style:
+                                                MyTextStyles.semiBold.copyWith(
                                               fontSize: 12,
                                               color:
                                                   Colors.black.withOpacity(0.5),
@@ -114,7 +128,8 @@ class _MyRequirementListState extends State<MyRequirementList> {
                                   onTap: () async {
                                     var url = WhatsAppUnilink(
                                       phoneNumber: '+91${e.mobileNumber}',
-                                      text: "Hi",
+                                      text:
+                                          "Hi, My name is ${sharedPrefs.memberName} Proud Member of ${sharedPrefs.pcGroup}",
                                     );
 
                                     await launchUrl(Uri.parse('$url'));

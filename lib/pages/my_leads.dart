@@ -17,7 +17,6 @@ import '../model/mylead_model.dart';
 class MyLead extends StatefulWidget {
   const MyLead({Key? key}) : super(key: key);
 
-
   @override
   State<MyLead> createState() => _MyLeadState();
 }
@@ -38,7 +37,7 @@ class _MyLeadState extends State<MyLead> with TickerProviderStateMixin {
   getMyLeads() async {
     context
         .read<LeadRequirementProvider>()
-        .getMyLeads(memberID:sharedPrefs.memberId)
+        .getMyLeads(memberID: sharedPrefs.memberId)
         .then((value) {
       if (value.success == true) {
         if (value.data == null) {
@@ -49,7 +48,9 @@ class _MyLeadState extends State<MyLead> with TickerProviderStateMixin {
                 TabController(length: myLeadList.length, vsync: this);
           });
 
-          print(myLeadList.length);
+          if (kDebugMode) {
+            print(myLeadList.length);
+          }
         }
       }
     });
@@ -121,7 +122,8 @@ class _MyLeadState extends State<MyLead> with TickerProviderStateMixin {
                     ),
                   )
                 : const EmptyScreen(
-                    title: "No Leads Found", image: "assets/images/nosearchfound.png"),
+                    title: "No Leads Found",
+                    image: "assets/images/nosearchfound.png"),
       ),
     );
   }
